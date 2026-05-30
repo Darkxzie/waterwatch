@@ -6,12 +6,13 @@ This repository currently contains the initial full-stack scaffold for the platf
 
 ## Live Demo
 
-- GitLab Pages deployment target: `https://kamel.code.swecha.org/waterwatch/`
+- GitLab Pages deployment: `http://waterwatch-9e3207.pages.swecha.net`
 
 Note:
 
 - this deploys the frontend from the existing `code.swecha.org` repository
 - interactive API features still require a reachable backend API unless a hosted backend is added later
+- if the link does not open from your network, the GitLab Pages DNS for the Swecha instance may need admin-side fixing even though the pipeline has already passed
 
 ## Features
 
