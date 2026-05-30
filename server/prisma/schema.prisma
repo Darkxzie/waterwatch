@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String      @id @default(uuid())
+  email       String      @unique
+  password    String
+  name        String
+  role        Role        @default(CITIZEN)
+  createdAt   DateTime    @default(now())
+  complaints  Complaint[] @relation("CitizenComplaints")
+  assignments Complaint[] @relation("AssignedComplaints")
+}
+
+model Complaint {
+  id                  String     @id @default(uuid())
+  userId              String
+  user                User       @relation("CitizenComplaints", fields: [userId], references: [id])
+  issueType           IssueType
+  description         String
+  photoUrl            String?
+  latitude            Float
+  longitude           Float
+  address             String?
+  aiCategory          String?
+  aiSeverity          Severity?
+  aiPriority          Priority?
+  aiSummary           String?
+  aiConfidence        Float?
+  aiSuggestedDept     String?
+  aiKeyFactors        String[]
+  aiStatus            String?    @default("COMPLETED")
+  status              Status     @default(PENDING)
+  assignedTo          String?
+  assignedAuthority   User?      @relation("AssignedComplaints", fields: [assignedTo], references: [id])
+  resolvedAt          DateTime?
+  adminNotes          String?
+  upvotes             Int        @default(0)
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  @@index([latitude, longitude])
+  @@index([status])
+  @@index([aiSeverity])
+}
+
+enum Role {
+  CITIZEN
+  AUTHORITY
+  ADMIN
+}
+
+enum IssueType {
+  PIPE_LEAK
+  NO_WATER_SUPPLY
+  DIRTY_WATER
+  WATER_WASTAGE
+  OTHER
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum Priority {
+  ROUTINE
+  MODERATE
+  IMMEDIATE
+  EMERGENCY
+}
+
+enum Status {
+  PENDING
+  UNDER_REVIEW
+  ASSIGNED
+  IN_PROGRESS
+  RESOLVED
+  REJECTED
+}
