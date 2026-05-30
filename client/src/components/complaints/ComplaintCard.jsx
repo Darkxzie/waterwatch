@@ -1,6 +1,7 @@
 import { Badge } from '../ui/Badge.jsx';
 import { getSeverityColor } from '../../utils/getSeverityColor.js';
 import { formatDate } from '../../utils/formatDate.js';
+import { StatusTimeline } from './StatusTimeline.jsx';
 
 export function ComplaintCard({ complaint }) {
   return (
@@ -13,6 +14,9 @@ export function ComplaintCard({ complaint }) {
         <Badge className={getSeverityColor(complaint.aiSeverity)}>{complaint.aiSeverity || 'PENDING'}</Badge>
       </div>
       <p className="mt-4 text-sm text-slate-700">{complaint.aiSummary || complaint.description}</p>
+      <div className="mt-4">
+        <StatusTimeline currentStatus={complaint.status} />
+      </div>
       <div className="mt-4 flex items-center justify-between text-sm text-slate-500">
         <span>Status: {complaint.status}</span>
         <span>ID: {complaint.id.slice(0, 8)}</span>

@@ -1,15 +1,86 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import DOMPurify from 'dompurify';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import { PageWrapper } from '../components/layout/PageWrapper.jsx';
 import { issueTypes } from '../constants/issueTypes.js';
 import { useGeolocation } from '../hooks/useGeolocation.js';
-import { MapPlaceholder } from '../components/map/MapPlaceholder.jsx';
+import { LeafletBaseMap } from '../components/map/LeafletBaseMap.jsx';
 import { Button } from '../components/ui/Button.jsx';
+import { api } from '../lib/api.js';
+import { useAuthStore } from '../store/authStore.js';
 
 export default function Report() {
-  const { coords, error } = useGeolocation();
+  const navigate = useNavigate();
+  const user = useAuthStore((state) => state.user);
+  const { coords, error, setCoords } = useGeolocation();
   const [description, setDescription] = useState('');
+  const [address, setAddress] = useState('Hyderabad');
   const [issueType, setIssueType] = useState(issueTypes[0].value);
+  const [photo, setPhoto] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(null);
+
+  const marker = useMemo(() => ({ latitude: coords.latitude, longitude: coords.longitude }), [coords.latitude, coords.longitude]);
+
+  async function handleSubmit() {
+    if (!user) {
+      toast.error('Please login before submitting a complaint.');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append('issueType', issueType);
+      formData.append('description', description.trim());
+      formData.append('latitude', String(coords.latitude));
+      formData.append('longitude', String(coords.longitude));
+      formData.append('address', address.trim());
+      if (photo) {
+        formData.append('photo', photo);
+      }
+
+      const response = await api.post('/complaints', formData);
+      setSubmitted(response.data.data);
+      toast.success('Complaint submitted successfully');
+    } catch (submitError) {
+      toast.error(submitError.response?.data?.error || 'Complaint submission failed');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (submitted) {
+    return (
+      <PageWrapper className="flex justify-center">
+        <section className="w-full max-w-2xl rounded-[2rem] bg-white p-8 shadow-soft">
+          <p className="text-sm font-semibold uppercase tracking-wide text-water">Complaint submitted</p>
+          <h1 className="mt-2 font-heading text-3xl font-bold">Your report is now in the queue.</h1>
+          <p className="mt-4 text-slate-600">Complaint ID: {submitted.id}</p>
+          <div className="mt-6 grid gap-3 rounded-3xl bg-slate-50 p-5">
+            <p>Severity: {submitted.aiSeverity || 'PENDING'}</p>
+            <p>Priority: {submitted.aiPriority || 'ROUTINE'}</p>
+            <p>Summary: {submitted.aiSummary || 'Analysis pending'}</p>
+          </div>
+          <div className="mt-6 flex gap-3">
+            <Button onClick={() => navigate('/map')}>View on Map</Button>
+            <Button
+              className="bg-slate-800 hover:bg-slate-700"
+              onClick={() => {
+                setSubmitted(null);
+                setDescription('');
+                setPhoto(null);
+              }}
+            >
+              Report Another Issue
+            </Button>
+          </div>
+        </section>
+      </PageWrapper>
+    );
+  }
 
   return (
     <PageWrapper className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
@@ -42,19 +113,82 @@ export default function Report() {
             />
             <span className="text-xs text-slate-500">{description.length}/1500 characters</span>
           </label>
-          <div className="rounded-2xl border border-dashed border-slate-300 p-6 text-sm text-slate-500">
-            Drag and drop image upload area. Accepts JPEG, PNG, WEBP up to 10MB.
+          <label className="grid gap-2">
+            <span className="text-sm font-semibold text-slate-700">Area / Address</span>
+            <input
+              value={address}
+              onChange={(event) => setAddress(DOMPurify.sanitize(event.target.value))}
+              className="rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-water"
+              placeholder="Enter locality or landmark"
+            />
+          </label>
+          <label className="rounded-2xl border border-dashed border-slate-300 p-6 text-sm text-slate-500">
+            <span className="mb-3 block font-semibold text-slate-700">Photo Upload</span>
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={(event) => setPhoto(event.target.files?.[0] || null)}
+            />
+            <span className="mt-2 block">Accepts JPEG, PNG, WEBP up to 10MB.</span>
+            {photo ? <span className="mt-2 block text-water">Selected: {photo.name}</span> : null}
+          </label>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="grid gap-2">
+              <span className="text-sm font-semibold text-slate-700">Latitude</span>
+              <input
+                type="number"
+                step="0.0001"
+                value={coords.latitude}
+                onChange={(event) =>
+                  setCoords((current) => ({
+                    ...current,
+                    latitude: Number(event.target.value)
+                  }))
+                }
+                className="rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-water"
+              />
+            </label>
+            <label className="grid gap-2">
+              <span className="text-sm font-semibold text-slate-700">Longitude</span>
+              <input
+                type="number"
+                step="0.0001"
+                value={coords.longitude}
+                onChange={(event) =>
+                  setCoords((current) => ({
+                    ...current,
+                    longitude: Number(event.target.value)
+                  }))
+                }
+                className="rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-water"
+              />
+            </label>
           </div>
-          <Button disabled={description.trim().length < 20}>Submit Complaint</Button>
+          <Button loading={loading} loadingText="Submitting complaint..." disabled={description.trim().length < 20} onClick={handleSubmit}>
+            Submit Complaint
+          </Button>
         </div>
       </section>
       <section className="space-y-4">
-        <MapPlaceholder title="Confirm Location Pin" />
+        <div className="overflow-hidden rounded-3xl border border-slate-200 shadow-soft">
+          <LeafletBaseMap
+            center={[coords.latitude, coords.longitude]}
+            marker={marker}
+            popupText="Drag or click to adjust issue location"
+            onSelect={({ lat, lng }) =>
+              setCoords({
+                latitude: lat,
+                longitude: lng
+              })
+            }
+          />
+        </div>
         <div className="rounded-3xl bg-white p-6 shadow-soft">
           <h2 className="font-heading text-xl font-semibold">Detected Location</h2>
           <p className="mt-2 text-sm text-slate-600">
             Lat: {coords.latitude.toFixed(4)} | Lng: {coords.longitude.toFixed(4)}
           </p>
+          <p className="mt-2 text-sm text-slate-500">Click on the map or drag the marker to fine-tune the complaint location.</p>
           {error ? <p className="mt-2 text-sm text-critical">{error}</p> : null}
         </div>
       </section>
