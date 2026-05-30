@@ -4,6 +4,15 @@ WaterWatch is an AI-assisted civic reporting platform for water-related urban is
 
 This repository currently contains the initial full-stack scaffold for the platform, including a React frontend, Express API, Prisma schema, shared Zod validation, and baseline tests.
 
+## Live Demo
+
+- GitLab Pages deployment target: `https://kamel.code.swecha.org/waterwatch/`
+
+Note:
+
+- this deploys the frontend from the existing `code.swecha.org` repository
+- interactive API features still require a reachable backend API unless a hosted backend is added later
+
 ## Features
 
 - Citizen complaint reporting flow with issue type, description, photo, and location
