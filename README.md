@@ -31,14 +31,80 @@ This repository currently contains the initial full-stack scaffold for the platf
 
 ```text
 waterwatch/
-  client/              React frontend
-  server/              Express backend
-  shared/              Shared schemas/constants
-  .env.example         Required environment variables
-  package.json         npm workspace root
-  README.md            Project overview and developer setup
-  USER_MANUAL.md       End-user guide for citizens and authorities
+  client/                  React frontend
+    src/
+      components/          Reusable UI, layout, complaint, map, dashboard pieces
+      constants/           App constants such as issue types and status flow
+      hooks/               React Query, auth, geolocation, and UI hooks
+      lib/                 API client and shared frontend integrations
+      pages/               Route-level pages
+      store/               Zustand stores
+      utils/               Formatting and display helpers
+      App.jsx              Route shell
+      main.jsx             React entry point
+      index.css            Tailwind entry and theme styles
+    index.html             Vite HTML shell
+    package.json           Frontend dependencies and scripts
+    tailwind.config.js     Tailwind theme configuration
+    vite.config.js         Vite configuration
+  server/                  Express backend
+    controllers/           Route handlers for auth, complaints, and admin features
+    middleware/            Auth, upload, rate limit, and error middleware
+    prisma/
+      schema.prisma        Database schema
+    routes/                Express route modules
+    services/              AI analysis and storage services
+    tests/                 Backend smoke tests
+    utils/                 Logger, Prisma client, response helpers, token helpers
+    app.js                 Express app factory
+    index.js               Server entry point
+    package.json           Backend dependencies and scripts
+  shared/                  Shared package used by client and server
+    schemas/               Shared Zod validation schemas and constants
+    package.json           Shared package manifest
+  .env.example             Required environment variables
+  CONTRIBUTING.md          Team workflow and contribution guidelines
+  README.md                Project overview and developer setup
+  USER_MANUAL.md           End-user guide for citizens and authorities
+  package.json             npm workspace root
+  package-lock.json        Workspace lockfile
 ```
+
+## Project Structure Details
+
+### `client/`
+
+The frontend contains the citizen and authority user interfaces. It is organized so route pages stay thin and reusable logic is pushed into components, hooks, stores, and utilities.
+
+- `src/components/`
+  - `ui/` contains reusable building blocks such as buttons, badges, and banners
+  - `layout/` contains shared layout wrappers and navigation
+  - `complaints/` contains complaint-specific cards and status UI
+  - `map/` contains map-related components
+  - `dashboard/` contains authority dashboard presentation components
+- `src/pages/` contains route-level screens like `Home`, `Report`, `Map`, and `Dashboard`
+- `src/hooks/` contains data access and browser-behavior hooks
+- `src/store/` contains Zustand state slices
+- `src/lib/` contains the Axios API client
+- `src/utils/` contains small pure helpers
+
+### `server/`
+
+The backend is structured around Express route groups and supporting services.
+
+- `routes/` defines the public API surface
+- `controllers/` holds the request handlers used by those routes
+- `middleware/` contains cross-cutting concerns like auth and upload validation
+- `services/` contains integrations such as Claude-based AI analysis and storage handling
+- `utils/` contains shared backend infrastructure helpers
+- `prisma/schema.prisma` defines the database models and enums
+- `tests/` contains backend verification
+
+### `shared/`
+
+The shared workspace package keeps validation and cross-layer contracts in one place so the client and server use the same schemas.
+
+- `schemas/index.js` contains shared Zod schemas, enums, and query validation helpers
 
 ## Application Architecture
 
