@@ -10,11 +10,12 @@ pages:
   stage: deploy
   script:
     - npm ci
-    - VITE_BASE_PATH="/waterwatch/" npm run build --workspace client
+    - npm run build --workspace client
     - cp -r client/dist public
     - cp public/index.html public/404.html
   artifacts:
     paths:
       - public
+    expire_in: never
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
