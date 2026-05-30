@@ -1,328 +1,314 @@
 # Contributing to WaterWatch
 
-This document explains how Group KMS should contribute to WaterWatch as a coordinated engineering team. It is written specifically for the current KMS team profile and assigns responsibilities according to each member's published strengths and learning goals.
+Thank you for contributing to WaterWatch.
 
-Reference team profile:
+This document explains how to contribute code, documentation, tests, and design improvements to the project in a way that keeps the repository consistent and maintainable.
 
-- KMS Team Portfolio: <https://darkxzie.github.io/kms-team-portfolio/>
+## Table of Contents
 
-## Team-Based Contribution Model
+- [Code of Conduct](#code-of-conduct)
+- [Ways to Contribute](#ways-to-contribute)
+- [Getting Started](#getting-started)
+- [Development Setup](#development-setup)
+- [Project Workflow](#project-workflow)
+- [Branch Naming](#branch-naming)
+- [Commit Messages](#commit-messages)
+- [Coding Guidelines](#coding-guidelines)
+- [Testing](#testing)
+- [Documentation](#documentation)
+- [Pull Requests](#pull-requests)
+- [Issue Reporting](#issue-reporting)
 
-Group KMS is composed of three complementary contributors:
+## Code of Conduct
 
-- Kamal Manchenella: AI research, machine learning, deep learning, technical writing
-- Madhura Bhattu: embedded systems, AI/ML, design-oriented thinking
-- Siddharth Chukka: full-stack development, databases, systems
+Be respectful, direct, and constructive.
 
-WaterWatch fits the team well because it requires:
+When reviewing or discussing changes:
 
-- an AI-assisted classification pipeline
-- a production-style full-stack web app
-- thoughtful UX for both citizens and authorities
-- clean documentation and maintainable collaboration
+- focus on the code and behavior, not the person
+- explain tradeoffs clearly
+- prefer actionable suggestions over vague criticism
+- assume good intent, but keep technical standards high
 
-## Ownership Split
+## Ways to Contribute
 
-### Kamal Manchenella
+You can contribute in several ways:
 
-Primary ownership:
+- fixing bugs
+- implementing features
+- improving performance
+- adding tests
+- improving documentation
+- refining accessibility and UI behavior
+- reporting issues and edge cases
 
-- AI complaint analysis service
-- prompt design and response validation
-- AI fallback behavior and analysis retry strategy
-- analytics definitions and severity/priority logic
-- technical documentation and architecture notes
+## Getting Started
 
-Suggested WaterWatch scope:
+Before making changes:
 
-- [server/services/aiAnalysis.js](C:\Users\gask4\waterwatch\server\services\aiAnalysis.js)
-- AI response schema validation and parsing hardening
-- confidence scoring policy
-- analytics interpretation and reporting logic
-- README and product documentation maintenance
+1. read the [README.md](C:\Users\gask4\waterwatch\README.md)
+2. review the current project structure and scripts
+3. check whether there is already related work in progress
+4. keep changes focused to one problem or one feature at a time
 
-Secondary support:
+## Development Setup
 
-- backend API design review
-- testing around AI failure modes
-- issue triage policy definition
+### Prerequisites
 
-### Madhura Bhattu
+- Node.js 18 or newer
+- npm
+- PostgreSQL
 
-Primary ownership:
+### Install dependencies
 
-- citizen-facing UX quality
-- complaint form experience and accessibility
-- visual design polish
-- location confirmation flow
-- future civic hardware or sensor integration concepts
+```bash
+npm install
+```
 
-Suggested WaterWatch scope:
+### Configure environment
 
-- [client/src/pages/Report.jsx](C:\Users\gask4\waterwatch\client\src\pages\Report.jsx)
-- [client/src/components](C:\Users\gask4\waterwatch\client\src\components)
-- input states, error states, and mobile responsiveness
-- map interaction ergonomics
-- design consistency across citizen and authority surfaces
+Create a local environment file from the example:
 
-Secondary support:
+```bash
+cp .env.example .env
+```
 
-- AI-assisted UX decisions for report quality
-- manual test cases for real-world issue reporting
-- future IoT or embedded extension ideas for water monitoring
+On Windows PowerShell:
 
-### Siddharth Chukka
+```powershell
+Copy-Item .env.example .env
+```
 
-Primary ownership:
+### Generate Prisma client
 
-- full-stack feature wiring
-- database-backed complaint flows
-- auth flows and protected routes
-- admin dashboard behavior
-- API integration between frontend and backend
+```bash
+npm run prisma:generate
+```
 
-Suggested WaterWatch scope:
+### Run database migrations
 
-- [server/routes](C:\Users\gask4\waterwatch\server\routes)
-- [server/controllers](C:\Users\gask4\waterwatch\server\controllers)
-- [server/prisma/schema.prisma](C:\Users\gask4\waterwatch\server\prisma\schema.prisma)
-- [client/src/lib/api.js](C:\Users\gask4\waterwatch\client\src\lib\api.js)
-- [client/src/hooks](C:\Users\gask4\waterwatch\client\src\hooks)
-- [client/src/pages/Dashboard.jsx](C:\Users\gask4\waterwatch\client\src\pages\Dashboard.jsx)
-- [client/src/pages/Analytics.jsx](C:\Users\gask4\waterwatch\client\src\pages\Analytics.jsx)
+```bash
+npm run prisma:migrate
+```
 
-Secondary support:
+### Start the project
 
-- query performance and pagination
-- integration testing
-- deployment readiness
+```bash
+npm run dev
+```
 
-## Work Breakdown For WaterWatch
+## Project Workflow
 
-To avoid overlap and unclear ownership, use the following split.
+Use a simple branch-based workflow:
 
-### Track 1: AI Triage and Complaint Intelligence
+1. create a branch from `main`
+2. make focused changes
+3. run relevant tests and checks
+4. open a pull request
+5. address review comments
+6. merge only after verification
 
-Owner: Kamal
+Avoid mixing unrelated changes in one branch.
 
-Deliverables:
+## Branch Naming
 
-- production-ready Claude analysis pipeline
-- structured JSON parsing and retry behavior
-- AI quality checks for category, severity, and priority
-- analytics definitions that align with civic operations
+Use descriptive branch names:
 
-Dependencies:
+- `feat/report-form-validation`
+- `fix/auth-refresh-flow`
+- `docs/update-user-manual`
+- `refactor/admin-analytics-service`
+- `test/add-complaint-route-tests`
 
-- complaint submission data from Siddharth
-- UI presentation of AI results from Madhura
+Recommended prefixes:
 
-### Track 2: Citizen Experience
+- `feat/`
+- `fix/`
+- `docs/`
+- `refactor/`
+- `test/`
+- `chore/`
 
-Owner: Madhura
+## Commit Messages
 
-Deliverables:
+Use clear, concise commit messages.
 
-- polished report form
-- mobile-friendly upload and location flow
-- complaint success state
-- public map filters and interaction design
-- accessibility improvements
+Preferred style:
 
-Dependencies:
+```text
+type: short summary
+```
 
-- live API and auth flow from Siddharth
-- AI result fields from Kamal
+Examples:
 
-### Track 3: Platform Backbone
+- `feat: add complaint submission endpoint`
+- `fix: validate upload mime types on server`
+- `docs: expand readme project structure`
+- `test: add health route smoke test`
 
-Owner: Siddharth
+Recommended commit types:
 
-Deliverables:
+- `feat`
+- `fix`
+- `docs`
+- `refactor`
+- `test`
+- `chore`
 
-- auth and complaint APIs
-- Prisma migrations and data model stability
-- frontend-backend integration
-- admin dashboard and analytics wiring
-- pagination, filtering, and protected routes
+## Coding Guidelines
 
-Dependencies:
+### General
 
-- triage output contract from Kamal
-- UI states and component expectations from Madhura
+- keep files focused on a single responsibility
+- prefer readable code over clever code
+- avoid unrelated refactors in feature branches
+- keep naming consistent with the rest of the project
+- do not commit secrets or environment-specific credentials
 
-## Collaboration Rules
+### Frontend
 
-### Branching
+- keep route pages thin where possible
+- move reusable behavior into components, hooks, or utilities
+- preserve accessibility and keyboard navigation
+- keep responsive behavior in mind for citizen-facing flows
 
-Each member should work on focused branches:
+### Backend
 
-- `feat/ai-triage-*`
-- `feat/citizen-ui-*`
-- `feat/platform-*`
-- `fix/*`
-- `docs/*`
+- validate request payloads using shared Zod schemas when possible
+- keep route handlers small and push reusable logic into services or utilities
+- preserve the consistent API response shape
+- do not bypass auth or role checks on protected routes
 
-Avoid large mixed-purpose branches.
+### Database
 
-### Pull Requests
+- make schema changes through Prisma
+- keep migrations intentional and reviewable
+- avoid breaking data model changes without updating dependent code
 
-Every PR should:
+## Testing
 
-- solve one focused problem
-- include a short summary of user impact
-- mention affected routes, pages, or schema changes
-- include test or verification notes
-- request review from the most relevant teammate
+Run the relevant checks before opening a pull request.
 
-Suggested review routing:
+### Root-level checks
 
-- AI logic PRs: Kamal reviews first
-- UI and UX PRs: Madhura reviews first
-- schema/API/integration PRs: Siddharth reviews first
+```bash
+npm run test
+```
 
-### Commit Style
+### Backend tests
 
-Use clear conventional-style commits:
+```bash
+npm run test --workspace server
+```
 
-- `feat: add complaint submission mutation`
-- `fix: prevent invalid image mime upload`
-- `docs: add authority workflow manual`
-- `refactor: split admin analytics service`
+### Frontend tests
 
-### Review Standard
+```bash
+npm run test --workspace client
+```
 
-Review for:
+### Frontend production build
+
+```bash
+npm run build --workspace client
+```
+
+If your change affects setup, Prisma, auth, uploads, AI analysis, or route behavior, include a short note in the pull request describing what you verified manually.
+
+## Documentation
+
+Documentation is part of the product and should stay current with behavior.
+
+Update documentation when you change:
+
+- setup steps
+- environment variables
+- API behavior
+- contributor workflow
+- user-facing flows
+- project structure
+
+Relevant files may include:
+
+- [README.md](C:\Users\gask4\waterwatch\README.md)
+- [USER_MANUAL.md](C:\Users\gask4\waterwatch\USER_MANUAL.md)
+- [CONTRIBUTING.md](C:\Users\gask4\waterwatch\CONTRIBUTING.md)
+
+## Pull Requests
+
+Each pull request should:
+
+- have a clear title
+- describe what changed
+- explain why the change was needed
+- mention any important tradeoffs
+- include testing or verification notes
+
+Good pull requests are:
+
+- small enough to review clearly
+- limited to one feature, fix, or refactor
+- supported by tests when behavior changes
+
+Before requesting review, confirm:
+
+- the branch is up to date enough to merge cleanly
+- tests relevant to the change have passed
+- documentation is updated if needed
+- no secrets or local-only files are included
+
+## Issue Reporting
+
+When reporting a bug, include:
+
+- what you expected
+- what actually happened
+- steps to reproduce
+- screenshots or logs if useful
+- environment details when relevant
+
+When proposing a feature, include:
+
+- the problem it solves
+- who benefits
+- any constraints or tradeoffs
+
+## Review Expectations
+
+Code review should focus on:
 
 - correctness
+- security
 - maintainability
-- user impact
-- security implications
-- mobile behavior
-- API contract consistency
+- behavior regressions
+- test coverage
+- documentation gaps
 
-Do not approve code just because it works locally.
+If you approve a change, you are also approving its impact on the repository.
 
-## Shared Engineering Workflow
+## Scope Discipline
 
-The KMS portfolio emphasizes:
+Keep contributions narrow and deliberate.
 
-- daily check-ins
-- weekly demos
-- pair programming
-- collaborative debugging
+Good:
 
-Apply that directly here.
+- one bug fix
+- one route improvement
+- one UI enhancement
+- one documentation update
 
-### Daily Check-In
+Bad:
 
-Each member should post:
+- a bug fix plus unrelated formatting cleanup
+- a feature plus opportunistic schema redesign
+- a documentation-only branch that silently changes runtime code
 
-- what is in progress
-- what changed yesterday
-- blockers
-- whether a review is needed
+## Questions
 
-### Weekly Demo
+If something is unclear:
 
-At least once per week, demo:
+- check the README first
+- inspect the existing code structure
+- open an issue or start a discussion before making a large change
 
-- one citizen-facing improvement
-- one authority-facing improvement
-- one backend or AI improvement
-
-### Pairing Recommendations
-
-Recommended pairs:
-
-- Kamal + Siddharth for AI-service and API contract work
-- Madhura + Siddharth for form, map, and dashboard integration
-- Kamal + Madhura for AI explanation UX and result presentation
-
-## Definition of Done
-
-A task is not done until:
-
-- code is committed on a focused branch
-- relevant tests pass
-- manual verification is documented
-- documentation is updated if behavior changed
-- another teammate has reviewed it when the change is non-trivial
-
-## Testing Expectations
-
-### Kamal
-
-Should verify:
-
-- malformed AI output handling
-- no-markdown JSON parsing behavior
-- fallback analysis path
-- severity and priority edge cases
-
-### Madhura
-
-Should verify:
-
-- mobile layout
-- keyboard navigation
-- upload and validation behavior
-- empty/error/success states
-
-### Siddharth
-
-Should verify:
-
-- auth middleware behavior
-- complaint CRUD flows
-- pagination and filters
-- Prisma queries and route protections
-
-## Documentation Responsibilities
-
-Documentation ownership should also be distributed.
-
-- Kamal: architecture, AI behavior, system notes
-- Madhura: user experience notes, screenshots, usability flows
-- Siddharth: setup, API behavior, data flow, deployment notes
-
-## Priority Order For Group KMS
-
-Build WaterWatch in this order:
-
-1. Siddharth completes database-backed auth and complaint submission flow.
-2. Kamal hardens AI triage and complaint analysis output handling.
-3. Madhura refines the citizen reporting experience and post-submit clarity.
-4. Siddharth wires dashboard, complaint tracking, and analytics data plumbing.
-5. Kamal and Madhura together improve how AI insights are presented to users and authorities.
-
-## Current Recommended Task Allocation
-
-Immediate next assignments:
-
-- Kamal
-  - finalize `aiAnalysis.js`
-  - define AI output validation contract
-  - document severity and priority policy
-
-- Madhura
-  - redesign `Report.jsx` into a production-ready citizen flow
-  - add upload preview, inline validation, and strong mobile behavior
-  - improve public map interaction design
-
-- Siddharth
-  - connect frontend report form to backend complaint submission
-  - implement login/register UI flow against live API
-  - wire dashboard and my-complaints pages to real backend data
-
-## Conduct
-
-Contribute with:
-
-- clear ownership
-- direct communication
-- honest review
-- working software over vague planning
-- documentation that stays current with code
-
-WaterWatch should be treated as a real product, not just a demo. That means quality, accountability, and visible iteration matter.
+Clear communication is better than avoidable rework.
