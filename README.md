@@ -6,17 +6,21 @@ This repository currently contains the initial full-stack scaffold for the platf
 
 ## Live Demo
 
+- Verified public live URL: `https://darkxzie.github.io/waterwatch/`
 - GitLab Pages job publishes the static frontend from `client/dist` via `.gitlab-ci.yml`
+- GitHub Pages workflow publishes the same frontend from this repository via `.github/workflows/deploy-github-pages.yml`
 - GitLab artifact browser URL: `https://code.swecha.org/Kamel/waterwatch/-/jobs/artifacts/main/file/public/index.html?job=pages`
 - Raw artifact URL: `https://code.swecha.org/Kamel/waterwatch/-/jobs/artifacts/main/raw/public/index.html?job=pages`
 - Pages hostname exposed by the GitLab instance: `http://kamel.pages.swecha.net/-/waterwatch/-/jobs/<job-id>/artifacts/public/index.html`
 
 Note:
 
+- the GitHub Pages URL above was verified to return HTTP 200 and serve the built `WaterWatch` app shell
+- production builds use `HashRouter` so static hosting works on GitHub Pages and other no-rewrite hosts
 - the artifact browser URL opens the GitLab job artifacts UI, not the app itself
 - the raw artifact URL serves the built `index.html` payload, but many browsers download it because GitLab returns it as `application/octet-stream`
 - the `kamel.pages.swecha.net` hostname was observed failing DNS resolution, so the Pages URL is not currently usable
-- there is therefore no guaranteed public browser-openable demo URL at the moment, even though the static build artifact exists
+- GitHub Pages is the current browser-openable public demo while Swecha Pages remains unavailable
 - interactive API features still require a reachable backend API unless a hosted backend is added later
 - fixing public access requires Swecha/GitLab admin-side Pages DNS or host configuration changes rather than frontend code changes in this repository
 
