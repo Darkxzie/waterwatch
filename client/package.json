@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "lint": "echo lint not configured"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@testing-library/react": "^16.3.0",
     "@vitejs/plugin-react": "^4.5.2",
+    "@vitest/coverage-v8": "^2.1.9",
     "autoprefixer": "^10.4.21",
     "jsdom": "^25.0.1",
     "postcss": "^8.5.4",

@@ -8,6 +8,7 @@
     "start": "node index.js",
     "build": "echo server build ready",
     "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage",
     "lint": "echo lint not configured",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev"
