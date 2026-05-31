@@ -10,6 +10,8 @@ import { Button } from '../components/ui/Button.jsx';
 import { api } from '../lib/api.js';
 import { useAuthStore } from '../store/authStore.js';
 
+const DESCRIPTION_MIN_LENGTH = 20;
+
 export default function Report() {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
@@ -20,13 +22,24 @@ export default function Report() {
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(null);
+  const [submitError, setSubmitError] = useState('');
 
   const marker = useMemo(() => ({ latitude: coords.latitude, longitude: coords.longitude }), [coords.latitude, coords.longitude]);
+  const descriptionLength = description.trim().length;
+  const isValid = descriptionLength >= DESCRIPTION_MIN_LENGTH && Number.isFinite(coords.latitude) && Number.isFinite(coords.longitude);
 
-  async function handleSubmit() {
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setSubmitError('');
+
     if (!user) {
       toast.error('Please login before submitting a complaint.');
       navigate('/login');
+      return;
+    }
+
+    if (!isValid) {
+      setSubmitError(`Description must be at least ${DESCRIPTION_MIN_LENGTH} characters and location must be valid.`);
       return;
     }
 
@@ -45,8 +58,10 @@ export default function Report() {
       const response = await api.post('/complaints', formData);
       setSubmitted(response.data.data);
       toast.success('Complaint submitted successfully');
-    } catch (submitError) {
-      toast.error(submitError.response?.data?.error || 'Complaint submission failed');
+    } catch (requestError) {
+      const message = requestError.response?.data?.error || 'Complaint submission failed';
+      setSubmitError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -65,13 +80,17 @@ export default function Report() {
             <p>Summary: {submitted.aiSummary || 'Analysis pending'}</p>
           </div>
           <div className="mt-6 flex gap-3">
-            <Button onClick={() => navigate('/map')}>View on Map</Button>
+            <Button type="button" onClick={() => navigate('/map')}>
+              View on Map
+            </Button>
             <Button
+              type="button"
               className="bg-slate-800 hover:bg-slate-700"
               onClick={() => {
                 setSubmitted(null);
                 setDescription('');
                 setPhoto(null);
+                setSubmitError('');
               }}
             >
               Report Another Issue
@@ -84,9 +103,10 @@ export default function Report() {
 
   return (
     <PageWrapper className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
-      <section className="rounded-[2rem] bg-white p-8 shadow-soft">
+      <form className="rounded-[2rem] bg-white p-8 shadow-soft" onSubmit={handleSubmit}>
         <h1 className="font-heading text-3xl font-bold">Report a Water Issue</h1>
         <p className="mt-2 text-slate-600">Share what happened, attach a photo, and confirm the location pin.</p>
+        {!user ? <p className="mt-3 rounded-2xl bg-sky/10 px-4 py-3 text-sm text-water">Login is required before complaint submission.</p> : null}
         <div className="mt-8 grid gap-6">
           <div className="grid gap-3 sm:grid-cols-2">
             {issueTypes.map((item) => (
@@ -106,12 +126,14 @@ export default function Report() {
             <textarea
               value={description}
               onChange={(event) => setDescription(DOMPurify.sanitize(event.target.value))}
-              minLength={20}
+              minLength={DESCRIPTION_MIN_LENGTH}
               rows={6}
               className="rounded-2xl border border-slate-300 px-4 py-3 outline-none ring-water transition focus:ring-2"
               placeholder="Describe the issue, affected area, and urgency."
             />
-            <span className="text-xs text-slate-500">{description.length}/1500 characters</span>
+            <span className={`text-xs ${descriptionLength >= DESCRIPTION_MIN_LENGTH ? 'text-low' : 'text-slate-500'}`}>
+              {description.length}/1500 characters. Minimum {DESCRIPTION_MIN_LENGTH}.
+            </span>
           </label>
           <label className="grid gap-2">
             <span className="text-sm font-semibold text-slate-700">Area / Address</span>
@@ -127,7 +149,17 @@ export default function Report() {
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp"
-              onChange={(event) => setPhoto(event.target.files?.[0] || null)}
+              onChange={(event) => {
+                const selectedFile = event.target.files?.[0] || null;
+                if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
+                  setPhoto(null);
+                  setSubmitError('Photo must be 10MB or smaller.');
+                  return;
+                }
+
+                setSubmitError('');
+                setPhoto(selectedFile);
+              }}
             />
             <span className="mt-2 block">Accepts JPEG, PNG, WEBP up to 10MB.</span>
             {photo ? <span className="mt-2 block text-water">Selected: {photo.name}</span> : null}
@@ -164,11 +196,12 @@ export default function Report() {
               />
             </label>
           </div>
-          <Button loading={loading} loadingText="Submitting complaint..." disabled={description.trim().length < 20} onClick={handleSubmit}>
+          {submitError ? <p className="rounded-2xl bg-rose-50 px-4 py-3 text-sm text-critical">{submitError}</p> : null}
+          <Button type="submit" loading={loading} loadingText="Submitting complaint..." disabled={loading || !isValid}>
             Submit Complaint
           </Button>
         </div>
-      </section>
+      </form>
       <section className="space-y-4">
         <div className="overflow-hidden rounded-3xl border border-slate-200 shadow-soft">
           <LeafletBaseMap
