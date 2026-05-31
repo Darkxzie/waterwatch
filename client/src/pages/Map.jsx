@@ -14,16 +14,13 @@ export default function MapPage() {
   );
 
   return (
-    <PageWrapper className="grid gap-6 lg:grid-cols-[280px_1fr]">
-      <aside className="rounded-3xl bg-white p-6 shadow-soft">
-        <h1 className="font-heading text-2xl font-bold">Live Issue Map</h1>
-        <p className="mt-2 text-sm text-slate-600">Filter by severity and inspect the latest public complaints.</p>
-        <div className="mt-4 grid gap-2">
-          <select
-            value={severity}
-            onChange={(event) => setSeverity(event.target.value)}
-            className="rounded-2xl border border-slate-300 px-3 py-2"
-          >
+    <PageWrapper className="grid gap-6 lg:grid-cols-[320px_1fr]">
+      <aside className="glass-panel rounded-[2rem] p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky">Public monitoring</p>
+        <h1 className="mt-3 font-heading text-3xl font-bold text-white">Live Issue Map</h1>
+        <p className="mt-3 text-sm leading-7 text-mist">Inspect the active complaint surface across the city with a calmer, darker field view.</p>
+        <div className="mt-6 grid gap-3">
+          <select value={severity} onChange={(event) => setSeverity(event.target.value)} className="input-dark rounded-2xl px-4 py-3 outline-none">
             <option value="ALL">All severities</option>
             {severityLevels.map((level) => (
               <option key={level} value={level}>
@@ -31,10 +28,19 @@ export default function MapPage() {
               </option>
             ))}
           </select>
-          <p className="text-sm text-slate-500">{filtered.length} complaints visible</p>
+          <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+            <p className="text-xs uppercase tracking-[0.22em] text-mist">Visible complaints</p>
+            <p className="mt-2 font-heading text-3xl font-bold text-white">{filtered.length}</p>
+          </div>
+          <div className="grid gap-2 text-sm text-mist">
+            <p className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-critical" /> Critical</p>
+            <p className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-high" /> High</p>
+            <p className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-medium" /> Medium</p>
+            <p className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-low" /> Low</p>
+          </div>
         </div>
       </aside>
-      <div className="overflow-hidden rounded-3xl border border-slate-200 shadow-soft">
+      <div className="overflow-hidden rounded-[2rem] border border-white/8 shadow-soft glass-panel">
         <LeafletBaseMap center={[17.385, 78.4867]} zoom={12} popupText="Water issue location">
           {filtered.map((complaint) => (
             <Marker key={complaint.id} position={[complaint.latitude, complaint.longitude]} icon={markerIcon}>
@@ -49,7 +55,7 @@ export default function MapPage() {
             </Marker>
           ))}
         </LeafletBaseMap>
-        {isLoading ? <div className="border-t bg-white p-4 text-sm text-slate-500">Loading public complaints...</div> : null}
+        {isLoading ? <div className="border-t border-white/8 bg-white/5 p-4 text-sm text-mist">Loading public complaints...</div> : null}
       </div>
     </PageWrapper>
   );

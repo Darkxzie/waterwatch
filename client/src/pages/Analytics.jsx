@@ -2,7 +2,7 @@ import { Bar, BarChart, CartesianGrid, Line, LineChart, Pie, PieChart, Responsiv
 import { PageWrapper } from '../components/layout/PageWrapper.jsx';
 import { useAdminResolutionTime, useAdminSummary, useAdminTrends } from '../hooks/useComplaints.js';
 
-const chartColors = ['#0077B6', '#00B4D8', '#43AA8B', '#F9C74F', '#F77F00', '#EF233C'];
+const chartColors = ['#36bffa', '#7dd3fc', '#43AA8B', '#F9C74F', '#F77F00', '#EF233C'];
 
 export default function Analytics() {
   const { data: summary, error: summaryError } = useAdminSummary();
@@ -34,42 +34,45 @@ export default function Analytics() {
 
   return (
     <PageWrapper className="space-y-6">
-      <div>
-        <h1 className="font-heading text-3xl font-bold">Analytics</h1>
-        <p className="mt-2 text-slate-600">Live complaint distribution, trend, and resolution metrics for authority users.</p>
+      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky">Authority intelligence</p>
+          <h1 className="mt-2 font-heading text-4xl font-bold text-white">Analytics</h1>
+          <p className="mt-2 text-sm leading-7 text-mist">A darker, more legible operations surface for trend monitoring and response analysis.</p>
+        </div>
       </div>
-      {summaryError ? <div className="rounded-3xl bg-white p-6 text-critical shadow-soft">Login as the seeded admin to view analytics.</div> : null}
+      {summaryError ? <div className="glass-panel rounded-[2rem] p-6 text-critical">Login as the seeded admin to view analytics.</div> : null}
       <div className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-3xl bg-white p-6 shadow-soft">
-          <h2 className="mb-4 font-heading text-xl font-semibold">Complaints by Type</h2>
+        <div className="glass-panel rounded-[2rem] p-6">
+          <h2 className="mb-4 font-heading text-xl font-semibold text-white">Complaints by Type</h2>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={byType}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" hide />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="total" fill="#0077B6" radius={[8, 8, 0, 0]} />
+                <CartesianGrid stroke="rgba(142, 167, 194, 0.16)" strokeDasharray="3 3" />
+                <XAxis dataKey="name" hide stroke="#8ea7c2" />
+                <YAxis stroke="#8ea7c2" />
+                <Tooltip contentStyle={{ background: '#08111f', border: '1px solid #1f3350', color: '#e6f1ff' }} />
+                <Bar dataKey="total" fill="#36bffa" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="rounded-3xl bg-white p-6 shadow-soft">
-          <h2 className="mb-4 font-heading text-xl font-semibold">30 Day Trend</h2>
+        <div className="glass-panel rounded-[2rem] p-6">
+          <h2 className="mb-4 font-heading text-xl font-semibold text-white">30 Day Trend</h2>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={trendData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="count" stroke="#00B4D8" strokeWidth={3} />
+                <CartesianGrid stroke="rgba(142, 167, 194, 0.16)" strokeDasharray="3 3" />
+                <XAxis dataKey="day" stroke="#8ea7c2" />
+                <YAxis stroke="#8ea7c2" />
+                <Tooltip contentStyle={{ background: '#08111f', border: '1px solid #1f3350', color: '#e6f1ff' }} />
+                <Line type="monotone" dataKey="count" stroke="#7dd3fc" strokeWidth={3} dot={{ r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="rounded-3xl bg-white p-6 shadow-soft">
-          <h2 className="mb-4 font-heading text-xl font-semibold">Severity Distribution</h2>
+        <div className="glass-panel rounded-[2rem] p-6">
+          <h2 className="mb-4 font-heading text-xl font-semibold text-white">Severity Distribution</h2>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -78,20 +81,20 @@ export default function Analytics() {
                     <Cell key={entry.name} fill={chartColors[index % chartColors.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip contentStyle={{ background: '#08111f', border: '1px solid #1f3350', color: '#e6f1ff' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="rounded-3xl bg-white p-6 shadow-soft">
-          <h2 className="mb-4 font-heading text-xl font-semibold">Average Resolution Time</h2>
+        <div className="glass-panel rounded-[2rem] p-6">
+          <h2 className="mb-4 font-heading text-xl font-semibold text-white">Average Resolution Time</h2>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={resolutionByType} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" />
-                <YAxis type="category" dataKey="issueType" width={110} />
-                <Tooltip />
+                <CartesianGrid stroke="rgba(142, 167, 194, 0.16)" strokeDasharray="3 3" />
+                <XAxis type="number" stroke="#8ea7c2" />
+                <YAxis type="category" dataKey="issueType" width={110} stroke="#8ea7c2" />
+                <Tooltip contentStyle={{ background: '#08111f', border: '1px solid #1f3350', color: '#e6f1ff' }} />
                 <Bar dataKey="avgHours" fill="#43AA8B" radius={[0, 8, 8, 0]} />
               </BarChart>
             </ResponsiveContainer>

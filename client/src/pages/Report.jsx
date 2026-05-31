@@ -70,14 +70,14 @@ export default function Report() {
   if (submitted) {
     return (
       <PageWrapper className="flex justify-center">
-        <section className="w-full max-w-2xl rounded-[2rem] bg-white p-8 shadow-soft">
-          <p className="text-sm font-semibold uppercase tracking-wide text-water">Complaint submitted</p>
-          <h1 className="mt-2 font-heading text-3xl font-bold">Your report is now in the queue.</h1>
-          <p className="mt-4 text-slate-600">Complaint ID: {submitted.id}</p>
-          <div className="mt-6 grid gap-3 rounded-3xl bg-slate-50 p-5">
-            <p>Severity: {submitted.aiSeverity || 'PENDING'}</p>
-            <p>Priority: {submitted.aiPriority || 'ROUTINE'}</p>
-            <p>Summary: {submitted.aiSummary || 'Analysis pending'}</p>
+        <section className="glass-panel w-full max-w-2xl rounded-[2rem] p-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky">Complaint submitted</p>
+          <h1 className="mt-2 font-heading text-3xl font-bold text-white">Your report is now in the queue.</h1>
+          <p className="mt-4 text-mist">Complaint ID: {submitted.id}</p>
+          <div className="mt-6 grid gap-3 rounded-3xl border border-white/8 bg-white/5 p-5">
+            <p className="text-slate-200">Severity: {submitted.aiSeverity || 'PENDING'}</p>
+            <p className="text-slate-200">Priority: {submitted.aiPriority || 'ROUTINE'}</p>
+            <p className="text-slate-200">Summary: {submitted.aiSummary || 'Analysis pending'}</p>
           </div>
           <div className="mt-6 flex gap-3">
             <Button type="button" onClick={() => navigate('/map')}>
@@ -85,7 +85,7 @@ export default function Report() {
             </Button>
             <Button
               type="button"
-              className="bg-slate-800 hover:bg-slate-700"
+              className="border border-white/10 bg-white/8 text-white shadow-none hover:bg-white/12"
               onClick={() => {
                 setSubmitted(null);
                 setDescription('');
@@ -102,11 +102,12 @@ export default function Report() {
   }
 
   return (
-    <PageWrapper className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
-      <form className="rounded-[2rem] bg-white p-8 shadow-soft" onSubmit={handleSubmit}>
-        <h1 className="font-heading text-3xl font-bold">Report a Water Issue</h1>
-        <p className="mt-2 text-slate-600">Share what happened, attach a photo, and confirm the location pin.</p>
-        {!user ? <p className="mt-3 rounded-2xl bg-sky/10 px-4 py-3 text-sm text-water">Login is required before complaint submission.</p> : null}
+    <PageWrapper className="grid gap-8 lg:grid-cols-[1fr_0.95fr]">
+      <form className="glass-panel rounded-[2rem] p-8" onSubmit={handleSubmit}>
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky">Citizen reporting</p>
+        <h1 className="mt-3 font-heading text-4xl font-bold text-white">Report a Water Issue</h1>
+        <p className="mt-2 text-sm leading-7 text-mist">Share what happened, attach a photo, and confirm the map pin with a calmer, cleaner dark interface.</p>
+        {!user ? <p className="mt-3 rounded-2xl border border-sky/15 bg-sky/10 px-4 py-3 text-sm text-sky">Login is required before complaint submission.</p> : null}
         <div className="mt-8 grid gap-6">
           <div className="grid gap-3 sm:grid-cols-2">
             {issueTypes.map((item) => (
@@ -114,7 +115,9 @@ export default function Report() {
                 key={item.value}
                 type="button"
                 onClick={() => setIssueType(item.value)}
-                className={`rounded-2xl border p-4 text-left ${issueType === item.value ? 'border-water bg-sky/10' : 'border-slate-200'}`}
+                className={`rounded-2xl border p-4 text-left transition ${
+                  issueType === item.value ? 'border-sky/35 bg-sky/10 text-white' : 'border-white/10 bg-white/5 text-slate-200 hover:bg-white/8'
+                }`}
               >
                 <div className="text-2xl">{item.icon}</div>
                 <div className="mt-2 font-semibold">{item.label}</div>
@@ -122,30 +125,30 @@ export default function Report() {
             ))}
           </div>
           <label className="grid gap-2">
-            <span className="text-sm font-semibold text-slate-700">Description</span>
+            <span className="text-sm font-semibold text-slate-200">Description</span>
             <textarea
               value={description}
               onChange={(event) => setDescription(DOMPurify.sanitize(event.target.value))}
               minLength={DESCRIPTION_MIN_LENGTH}
               rows={6}
-              className="rounded-2xl border border-slate-300 px-4 py-3 outline-none ring-water transition focus:ring-2"
+              className="input-dark rounded-2xl px-4 py-3 outline-none transition"
               placeholder="Describe the issue, affected area, and urgency."
             />
-            <span className={`text-xs ${descriptionLength >= DESCRIPTION_MIN_LENGTH ? 'text-low' : 'text-slate-500'}`}>
+            <span className={`text-xs ${descriptionLength >= DESCRIPTION_MIN_LENGTH ? 'text-low' : 'text-mist'}`}>
               {description.length}/1500 characters. Minimum {DESCRIPTION_MIN_LENGTH}.
             </span>
           </label>
           <label className="grid gap-2">
-            <span className="text-sm font-semibold text-slate-700">Area / Address</span>
+            <span className="text-sm font-semibold text-slate-200">Area / Address</span>
             <input
               value={address}
               onChange={(event) => setAddress(DOMPurify.sanitize(event.target.value))}
-              className="rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-water"
+              className="input-dark rounded-2xl px-4 py-3 outline-none"
               placeholder="Enter locality or landmark"
             />
           </label>
-          <label className="rounded-2xl border border-dashed border-slate-300 p-6 text-sm text-slate-500">
-            <span className="mb-3 block font-semibold text-slate-700">Photo Upload</span>
+          <label className="rounded-2xl border border-dashed border-white/12 bg-white/[0.03] p-6 text-sm text-mist">
+            <span className="mb-3 block font-semibold text-slate-200">Photo Upload</span>
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp"
@@ -162,11 +165,11 @@ export default function Report() {
               }}
             />
             <span className="mt-2 block">Accepts JPEG, PNG, WEBP up to 10MB.</span>
-            {photo ? <span className="mt-2 block text-water">Selected: {photo.name}</span> : null}
+            {photo ? <span className="mt-2 block text-sky">Selected: {photo.name}</span> : null}
           </label>
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="grid gap-2">
-              <span className="text-sm font-semibold text-slate-700">Latitude</span>
+              <span className="text-sm font-semibold text-slate-200">Latitude</span>
               <input
                 type="number"
                 step="0.0001"
@@ -177,11 +180,11 @@ export default function Report() {
                     latitude: Number(event.target.value)
                   }))
                 }
-                className="rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-water"
+                className="input-dark rounded-2xl px-4 py-3 outline-none"
               />
             </label>
             <label className="grid gap-2">
-              <span className="text-sm font-semibold text-slate-700">Longitude</span>
+              <span className="text-sm font-semibold text-slate-200">Longitude</span>
               <input
                 type="number"
                 step="0.0001"
@@ -192,18 +195,18 @@ export default function Report() {
                     longitude: Number(event.target.value)
                   }))
                 }
-                className="rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-water"
+                className="input-dark rounded-2xl px-4 py-3 outline-none"
               />
             </label>
           </div>
-          {submitError ? <p className="rounded-2xl bg-rose-50 px-4 py-3 text-sm text-critical">{submitError}</p> : null}
+          {submitError ? <p className="rounded-2xl border border-critical/30 bg-critical/10 px-4 py-3 text-sm text-critical">{submitError}</p> : null}
           <Button type="submit" loading={loading} loadingText="Submitting complaint..." disabled={loading || !isValid}>
             Submit Complaint
           </Button>
         </div>
       </form>
       <section className="space-y-4">
-        <div className="overflow-hidden rounded-3xl border border-slate-200 shadow-soft">
+        <div className="overflow-hidden rounded-[2rem] border border-white/8 shadow-soft glass-panel">
           <LeafletBaseMap
             center={[coords.latitude, coords.longitude]}
             marker={marker}
@@ -216,12 +219,12 @@ export default function Report() {
             }
           />
         </div>
-        <div className="rounded-3xl bg-white p-6 shadow-soft">
-          <h2 className="font-heading text-xl font-semibold">Detected Location</h2>
-          <p className="mt-2 text-sm text-slate-600">
+        <div className="glass-panel rounded-[2rem] p-6">
+          <h2 className="font-heading text-xl font-semibold text-white">Detected Location</h2>
+          <p className="mt-2 text-sm text-mist">
             Lat: {coords.latitude.toFixed(4)} | Lng: {coords.longitude.toFixed(4)}
           </p>
-          <p className="mt-2 text-sm text-slate-500">Click on the map or drag the marker to fine-tune the complaint location.</p>
+          <p className="mt-2 text-sm leading-7 text-mist">Click on the map or drag the marker to fine-tune the complaint location.</p>
           {error ? <p className="mt-2 text-sm text-critical">{error}</p> : null}
         </div>
       </section>
