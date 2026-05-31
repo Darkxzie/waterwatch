@@ -6,12 +6,12 @@ This repository currently contains the initial full-stack scaffold for the platf
 
 ## Live Demo
 
-- Working GitLab-hosted deployment: `https://code.swecha.org/Kamel/waterwatch/-/jobs/artifacts/main/raw/public/index.html?job=pages`
+- Working GitLab-hosted deployment: `https://code.swecha.org/Kamel/waterwatch/-/jobs/artifacts/main/file/public/index.html?job=pages`
 - GitLab Pages endpoint reported by the instance: `http://waterwatch-9e3207.pages.swecha.net`
 
 Note:
 
-- the first link is the reliable live URL hosted through the existing `code.swecha.org` repository artifacts
+- the first link is the reliable browser-openable live URL hosted through the existing `code.swecha.org` repository artifacts
 - the second link is the GitLab Pages URL exposed by the instance
 - interactive API features still require a reachable backend API unless a hosted backend is added later
 - if the Pages hostname does not open from your network, the Swecha GitLab Pages DNS likely needs admin-side fixing even though the pipeline has already passed
