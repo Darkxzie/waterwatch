@@ -11,6 +11,6 @@ describe('App shell', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('See it. Report it. Fix it.')).toBeTruthy();
+    expect(screen.getByText('Fix it faster.', { exact: false })).toBeTruthy();
   });
 });

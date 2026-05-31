@@ -5,7 +5,15 @@ export default defineConfig({
   base: './',
   plugins: [react()],
   server: {
-    port: 5173
+    host: '0.0.0.0',
+    port: 5173,
+    allowedHosts: ['.loca.lt', '.lhr.life', '.localhost.run'],
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true
+      }
+    }
   },
   test: {
     environment: 'jsdom'
