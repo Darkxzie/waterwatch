@@ -33,4 +33,4 @@ EXPOSE 5000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
   CMD node -e "fetch('http://127.0.0.1:' + (process.env.PORT || 5000) + '/api/health').then((res) => { if (!res.ok) process.exit(1); }).catch(() => process.exit(1))"
 
-CMD ["npm", "run", "start", "--workspace", "server"]
+CMD ["sh", "-c", "npm run prisma:push --workspace server && npm run start --workspace server"]
