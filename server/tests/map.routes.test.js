@@ -11,8 +11,18 @@ afterEach(() => {
 test('GET /api/map/complaints returns public complaint markers', async () => {
   mockPrisma({
     complaint: {
-      findMany: async () => [{ id: 'cmp-1', issueType: 'PIPE_LEAK', latitude: 17.385, longitude: 78.4867, address: 'Ameerpet', aiSeverity: 'HIGH', status: 'PENDING' }]
-    }
+      findMany: async () => [
+        {
+          id: 'cmp-1',
+          issueType: 'PIPE_LEAK',
+          latitude: 17.385,
+          longitude: 78.4867,
+          address: 'Ameerpet',
+          aiSeverity: 'HIGH',
+          status: 'PENDING',
+        },
+      ],
+    },
   });
 
   const response = await request(createApp()).get('/api/map/complaints');
@@ -20,4 +30,18 @@ test('GET /api/map/complaints returns public complaint markers', async () => {
   assert.equal(response.statusCode, 200);
   assert.equal(response.body.success, true);
   assert.equal(response.body.data.length, 1);
+});
+
+test('GET /api/map/heatmap returns grouped complaint hotspots', async () => {
+  mockPrisma({
+    complaint: {
+      groupBy: async () => [{ address: 'Ameerpet', _count: { _all: 3 } }],
+    },
+  });
+
+  const response = await request(createApp()).get('/api/map/heatmap');
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.body.success, true);
+  assert.equal(response.body.data[0].address, 'Ameerpet');
 });

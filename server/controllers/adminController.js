@@ -1,4 +1,8 @@
-import { assignComplaintSchema, complaintQuerySchema, updateStatusSchema } from '@waterwatch/shared/schemas';
+import {
+  assignComplaintSchema,
+  complaintQuerySchema,
+  updateStatusSchema,
+} from '@waterwatch/shared/schemas';
 import { prisma } from '../utils/prisma.js';
 import { ok } from '../utils/response.js';
 
@@ -14,10 +18,10 @@ export async function getAllComplaints(req, res, next) {
             OR: [
               { description: { contains: query.search, mode: 'insensitive' } },
               { address: { contains: query.search, mode: 'insensitive' } },
-              { id: { contains: query.search, mode: 'insensitive' } }
-            ]
+              { id: { contains: query.search, mode: 'insensitive' } },
+            ],
           }
-        : {})
+        : {}),
     };
 
     const [items, total] = await prisma.$transaction([
@@ -26,9 +30,9 @@ export async function getAllComplaints(req, res, next) {
         include: { user: { select: { name: true, email: true } } },
         orderBy: { createdAt: 'desc' },
         skip: (query.page - 1) * query.limit,
-        take: query.limit
+        take: query.limit,
       }),
-      prisma.complaint.count({ where })
+      prisma.complaint.count({ where }),
     ]);
 
     return ok(res, items, { page: query.page, total });
@@ -45,8 +49,8 @@ export async function updateComplaintStatus(req, res, next) {
       data: {
         status: input.status,
         adminNotes: input.adminNotes,
-        resolvedAt: input.status === 'RESOLVED' ? new Date() : null
-      }
+        resolvedAt: input.status === 'RESOLVED' ? new Date() : null,
+      },
     });
 
     return ok(res, complaint);
@@ -63,8 +67,8 @@ export async function assignComplaint(req, res, next) {
       data: {
         assignedTo: input.assignedTo,
         aiPriority: input.priority,
-        status: 'ASSIGNED'
-      }
+        status: 'ASSIGNED',
+      },
     });
 
     return ok(res, complaint);
@@ -78,7 +82,7 @@ export async function getSummary(_req, res, next) {
     const [byType, bySeverity, totals] = await prisma.$transaction([
       prisma.complaint.groupBy({ by: ['issueType'], _count: { _all: true } }),
       prisma.complaint.groupBy({ by: ['aiSeverity'], _count: { _all: true } }),
-      prisma.complaint.count()
+      prisma.complaint.count(),
     ]);
 
     return ok(res, { totals, byType, bySeverity });
@@ -91,7 +95,7 @@ export async function getTrends(_req, res, next) {
   try {
     const complaints = await prisma.complaint.findMany({
       select: { id: true, createdAt: true, status: true, issueType: true },
-      orderBy: { createdAt: 'asc' }
+      orderBy: { createdAt: 'asc' },
     });
 
     return ok(res, complaints);
@@ -104,7 +108,7 @@ export async function getResolutionTime(_req, res, next) {
   try {
     const resolved = await prisma.complaint.findMany({
       where: { status: 'RESOLVED', resolvedAt: { not: null } },
-      select: { issueType: true, createdAt: true, resolvedAt: true }
+      select: { issueType: true, createdAt: true, resolvedAt: true },
     });
 
     return ok(res, resolved);

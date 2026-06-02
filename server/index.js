@@ -1,10 +1,8 @@
-import dotenv from 'dotenv';
+import './utils/loadEnv.js';
 import { createApp } from './app.js';
 import { logger } from './utils/logger.js';
 import { prisma } from './utils/prisma.js';
 import { seedDemoData } from './utils/seedDemoData.js';
-
-dotenv.config();
 
 const app = createApp();
 const port = Number(process.env.PORT || 5000);

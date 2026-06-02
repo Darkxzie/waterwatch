@@ -5,7 +5,7 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '/api';
 
 export const api = axios.create({
   baseURL: apiBaseUrl,
-  withCredentials: true
+  withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {

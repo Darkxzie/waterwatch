@@ -8,7 +8,7 @@ const navItems = [
   ['/map', 'Live Map'],
   ['/my-complaints', 'My Complaints'],
   ['/dashboard', 'Dashboard'],
-  ['/analytics', 'Analytics']
+  ['/analytics', 'Analytics'],
 ];
 
 export function Navbar() {
@@ -34,7 +34,9 @@ export function Navbar() {
               to={href}
               className={({ isActive }) =>
                 `rounded-full px-4 py-2 text-sm font-medium transition duration-300 ${
-                  isActive ? 'bg-white text-slate-950 shadow-soft' : 'text-mist hover:bg-white/8 hover:text-white'
+                  isActive
+                    ? 'bg-white text-slate-950 shadow-soft'
+                    : 'text-mist hover:bg-white/8 hover:text-white'
                 }`
               }
               style={{ animationDelay: `${index * 60}ms` }}
@@ -62,7 +64,10 @@ export function Navbar() {
             </button>
           </div>
         ) : (
-          <Link to="/login" className="rounded-full border border-sky/25 bg-white/5 px-4 py-2 text-sm font-semibold text-sky transition hover:bg-white/10">
+          <Link
+            to="/login"
+            className="rounded-full border border-sky/25 bg-white/5 px-4 py-2 text-sm font-semibold text-sky transition hover:bg-white/10"
+          >
             Login
           </Link>
         )}

@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import MyComplaints from './MyComplaints.jsx';
 
 vi.mock('../hooks/useComplaints.js', () => ({
-  useMyComplaints: vi.fn()
+  useMyComplaints: vi.fn(),
 }));
 
 import { useMyComplaints } from '../hooks/useComplaints.js';
@@ -18,7 +18,11 @@ describe('MyComplaints page', () => {
   });
 
   it('shows a login-related error message when the query errors', () => {
-    useMyComplaints.mockReturnValue({ data: [], isLoading: false, error: new Error('Unauthorized') });
+    useMyComplaints.mockReturnValue({
+      data: [],
+      isLoading: false,
+      error: new Error('Unauthorized'),
+    });
 
     render(<MyComplaints />);
 

@@ -10,12 +10,12 @@ vi.mock('../hooks/useGeolocation.js', () => ({
   useGeolocation: () => ({
     coords: { latitude: 17.385, longitude: 78.4867 },
     error: '',
-    setCoords: vi.fn()
-  })
+    setCoords: vi.fn(),
+  }),
 }));
 
 vi.mock('../components/map/LeafletBaseMap.jsx', () => ({
-  LeafletBaseMap: () => <div>Mock map</div>
+  LeafletBaseMap: () => <div>Mock map</div>,
 }));
 
 describe('Report page', () => {
@@ -36,11 +36,19 @@ describe('Report page', () => {
   });
 
   it('renders a success state after a valid complaint submission', async () => {
-    useAuthStore.setState({ user: { id: 'u1', name: 'Asha', role: 'CITIZEN' }, accessToken: 'token' });
+    useAuthStore.setState({
+      user: { id: 'u1', name: 'Asha', role: 'CITIZEN' },
+      accessToken: 'token',
+    });
     vi.spyOn(api, 'post').mockResolvedValue({
       data: {
-        data: { id: 'CMP-1', aiSeverity: 'HIGH', aiPriority: 'URGENT', aiSummary: 'Pipe leak confirmed' }
-      }
+        data: {
+          id: 'CMP-1',
+          aiSeverity: 'HIGH',
+          aiPriority: 'URGENT',
+          aiSummary: 'Pipe leak confirmed',
+        },
+      },
     });
 
     render(
@@ -52,7 +60,7 @@ describe('Report page', () => {
     );
 
     fireEvent.change(screen.getByPlaceholderText(/describe the issue/i), {
-      target: { value: 'Broken pipeline leaking water near the main road for several hours.' }
+      target: { value: 'Broken pipeline leaking water near the main road for several hours.' },
     });
 
     fireEvent.click(screen.getByRole('button', { name: /submit complaint/i }));

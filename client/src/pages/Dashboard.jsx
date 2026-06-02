@@ -14,13 +14,18 @@ export default function Dashboard() {
   const avgHours =
     resolution.length > 0
       ? (
-          resolution.reduce((total, item) => total + (new Date(item.resolvedAt) - new Date(item.createdAt)) / (1000 * 60 * 60), 0) /
-          resolution.length
+          resolution.reduce(
+            (total, item) =>
+              total + (new Date(item.resolvedAt) - new Date(item.createdAt)) / (1000 * 60 * 60),
+            0
+          ) / resolution.length
         ).toFixed(1)
       : '0';
   const resolvedToday = complaints.filter((item) => item.status === 'RESOLVED').length;
   const criticalIssues = complaints.filter((item) => item.aiSeverity === 'CRITICAL').length;
-  const openCount = complaints.filter((item) => item.status !== 'RESOLVED' && item.status !== 'REJECTED').length;
+  const openCount = complaints.filter(
+    (item) => item.status !== 'RESOLVED' && item.status !== 'REJECTED'
+  ).length;
 
   async function handleStatusChange(id, status) {
     try {
@@ -39,13 +44,25 @@ export default function Dashboard() {
     <PageWrapper className="space-y-6">
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky">Operations console</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky">
+            Operations console
+          </p>
           <h1 className="mt-2 font-heading text-4xl font-bold text-white">Authority Dashboard</h1>
-          <p className="mt-2 text-sm leading-7 text-mist">A darker, denser command view for triage, scanning, and response updates.</p>
+          <p className="mt-2 text-sm leading-7 text-mist">
+            A darker, denser command view for triage, scanning, and response updates.
+          </p>
         </div>
-        {isFetching ? <p className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-mist">Refreshing...</p> : null}
+        {isFetching ? (
+          <p className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-mist">
+            Refreshing...
+          </p>
+        ) : null}
       </div>
-      {error ? <div className="glass-panel rounded-[2rem] p-6 text-critical">Login as the seeded admin to use dashboard tools.</div> : null}
+      {error ? (
+        <div className="glass-panel rounded-[2rem] p-6 text-critical">
+          Login as the seeded admin to use dashboard tools.
+        </div>
+      ) : null}
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatsCard label="Total Open" value={String(openCount)} />
         <StatsCard label="Critical Issues" value={String(criticalIssues)} tone="text-critical" />
@@ -72,7 +89,10 @@ export default function Dashboard() {
             </thead>
             <tbody>
               {complaints.map((complaint) => (
-                <tr key={complaint.id} className="border-b border-white/6 transition hover:bg-white/[0.03]">
+                <tr
+                  key={complaint.id}
+                  className="border-b border-white/6 transition hover:bg-white/[0.03]"
+                >
                   <td className="py-3 font-medium text-white">{complaint.id.slice(0, 8)}</td>
                   <td>{complaint.issueType.replaceAll('_', ' ')}</td>
                   <td>{complaint.address || 'Unknown area'}</td>

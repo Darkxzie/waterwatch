@@ -16,8 +16,8 @@ export async function seedDemoData() {
           email: adminEmail,
           name: 'WaterWatch Admin',
           password: passwordHash,
-          role: 'ADMIN'
-        }
+          role: 'ADMIN',
+        },
       }),
       prisma.user.upsert({
         where: { email: citizenEmail },
@@ -26,9 +26,9 @@ export async function seedDemoData() {
           email: citizenEmail,
           name: 'Demo Citizen',
           password: passwordHash,
-          role: 'CITIZEN'
-        }
-      })
+          role: 'CITIZEN',
+        },
+      }),
     ]);
 
     const existingComplaints = await prisma.complaint.count();
@@ -38,7 +38,8 @@ export async function seedDemoData() {
           {
             userId: citizen.id,
             issueType: 'PIPE_LEAK',
-            description: 'Continuous pipeline leakage near Madhapur junction affecting traffic and wasting water.',
+            description:
+              'Continuous pipeline leakage near Madhapur junction affecting traffic and wasting water.',
             latitude: 17.4504,
             longitude: 78.3908,
             address: 'Madhapur',
@@ -49,7 +50,7 @@ export async function seedDemoData() {
             aiConfidence: 0.84,
             aiSuggestedDept: 'HMWSSB',
             aiKeyFactors: ['continuous leakage', 'public road impact'],
-            status: 'UNDER_REVIEW'
+            status: 'UNDER_REVIEW',
           },
           {
             userId: citizen.id,
@@ -66,7 +67,7 @@ export async function seedDemoData() {
             aiSuggestedDept: 'Water Board',
             aiKeyFactors: ['water contamination', 'multiple households affected'],
             status: 'ASSIGNED',
-            assignedTo: admin.id
+            assignedTo: admin.id,
           },
           {
             userId: citizen.id,
@@ -83,9 +84,9 @@ export async function seedDemoData() {
             aiSuggestedDept: 'HMWSSB',
             aiKeyFactors: ['supply disruption', 'apartment block complaint'],
             status: 'RESOLVED',
-            resolvedAt: new Date(Date.now() - 1000 * 60 * 60 * 8)
-          }
-        ]
+            resolvedAt: new Date(Date.now() - 1000 * 60 * 60 * 8),
+          },
+        ],
       });
     }
 

@@ -52,6 +52,7 @@
 ### Task 1: Add shared client test infrastructure
 
 **Files:**
+
 - Modify: `client/package.json`
 - Create: `client/src/test/setup.js`
 - Create: `client/src/test/renderApp.jsx`
@@ -116,8 +117,8 @@ export function renderApp(initialEntry = '/') {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: { retry: false },
-      mutations: { retry: false }
-    }
+      mutations: { retry: false },
+    },
   });
 
   return render(
@@ -146,6 +147,7 @@ git commit -m "test: add shared client test harness"
 ### Task 2: Add high-value client page tests
 
 **Files:**
+
 - Create: `client/src/pages/Home.test.jsx`
 - Create: `client/src/pages/Report.test.jsx`
 - Create: `client/src/pages/Login.test.jsx`
@@ -190,12 +192,12 @@ vi.mock('../hooks/useGeolocation.js', () => ({
   useGeolocation: () => ({
     coords: { latitude: 17.385, longitude: 78.4867 },
     error: '',
-    setCoords: vi.fn()
-  })
+    setCoords: vi.fn(),
+  }),
 }));
 
 vi.mock('../components/map/LeafletBaseMap.jsx', () => ({
-  LeafletBaseMap: () => <div>Mock map</div>
+  LeafletBaseMap: () => <div>Mock map</div>,
 }));
 
 describe('Report page', () => {
@@ -213,7 +215,7 @@ describe('Report page', () => {
     );
 
     fireEvent.change(screen.getByLabelText(/description/i), {
-      target: { value: 'Broken pipeline leaking water near the main road.' }
+      target: { value: 'Broken pipeline leaking water near the main road.' },
     });
 
     fireEvent.click(screen.getByRole('button', { name: /submit complaint/i }));
@@ -224,11 +226,19 @@ describe('Report page', () => {
   });
 
   it('renders a success state after a valid complaint submission', async () => {
-    useAuthStore.setState({ user: { id: 'u1', name: 'Asha', role: 'CITIZEN' }, accessToken: 'token' });
+    useAuthStore.setState({
+      user: { id: 'u1', name: 'Asha', role: 'CITIZEN' },
+      accessToken: 'token',
+    });
     vi.spyOn(api, 'post').mockResolvedValue({
       data: {
-        data: { id: 'CMP-1', aiSeverity: 'HIGH', aiPriority: 'URGENT', aiSummary: 'Pipe leak confirmed' }
-      }
+        data: {
+          id: 'CMP-1',
+          aiSeverity: 'HIGH',
+          aiPriority: 'URGENT',
+          aiSummary: 'Pipe leak confirmed',
+        },
+      },
     });
 
     render(
@@ -240,7 +250,7 @@ describe('Report page', () => {
     );
 
     fireEvent.change(screen.getByLabelText(/description/i), {
-      target: { value: 'Broken pipeline leaking water near the main road for several hours.' }
+      target: { value: 'Broken pipeline leaking water near the main road for several hours.' },
     });
 
     fireEvent.click(screen.getByRole('button', { name: /submit complaint/i }));
@@ -273,7 +283,7 @@ export function createComplaintsQueryOptions(apiClient = api) {
     queryFn: async () => {
       const response = await apiClient.get('/complaints/mine');
       return response.data.data;
-    }
+    },
   };
 }
 ```
@@ -306,6 +316,7 @@ git commit -m "test: cover client page flows"
 ### Task 3: Add shared component behavior tests
 
 **Files:**
+
 - Create: `client/src/components/layout/Navbar.test.jsx`
 - Create: `client/src/components/complaints/ComplaintCard.test.jsx`
 - Create: `client/src/components/complaints/StatusTimeline.test.jsx`
@@ -326,13 +337,21 @@ import { useAuthStore } from '../../store/authStore.js';
 describe('Navbar', () => {
   it('shows login when no user is present', () => {
     useAuthStore.setState({ user: null, accessToken: null });
-    render(<MemoryRouter><Navbar /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>
+    );
     expect(screen.getByRole('link', { name: /login/i })).toBeTruthy();
   });
 
   it('shows the current user name and logout when authenticated', () => {
     useAuthStore.setState({ user: { name: 'Asha', role: 'CITIZEN' }, accessToken: 'token' });
-    render(<MemoryRouter><Navbar /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>
+    );
     expect(screen.getByText('Asha')).toBeTruthy();
     expect(screen.getByRole('button', { name: /logout/i })).toBeTruthy();
   });
@@ -381,6 +400,7 @@ git commit -m "test: cover shared client component behavior"
 ### Task 4: Add server route and auth test seams
 
 **Files:**
+
 - Create: `server/tests/helpers/mockModules.js`
 - Create: `server/tests/auth.routes.test.js`
 - Modify only if required by failing tests: `server/app.js`, `server/routes/auth.js`, `server/controllers/authController.js`, `server/utils/prisma.js`, `server/utils/tokens.js`
@@ -404,7 +424,7 @@ test('POST /api/auth/register validates required fields', async () => {
 test('POST /api/auth/login rejects invalid credentials', async () => {
   const response = await request(createApp()).post('/api/auth/login').send({
     email: 'missing@example.com',
-    password: 'wrong-password'
+    password: 'wrong-password',
   });
 
   assert.equal(response.statusCode, 401);
@@ -427,13 +447,13 @@ export function mockPrisma(overrides = {}) {
     user: {
       findUnique: async () => null,
       create: async ({ data }) => ({ id: 'user-1', ...data }),
-      ...overrides.user
+      ...overrides.user,
     },
     complaint: {
       findMany: async () => [],
       create: async ({ data }) => ({ id: 'complaint-1', ...data }),
-      ...overrides.complaint
-    }
+      ...overrides.complaint,
+    },
   };
 }
 ```
@@ -456,6 +476,7 @@ git commit -m "test: add auth route test seams"
 ### Task 5: Add complaint and map route integration tests
 
 **Files:**
+
 - Create: `server/tests/complaints.routes.test.js`
 - Create: `server/tests/map.routes.test.js`
 - Modify only if required by failing tests: `server/routes/complaints.js`, `server/routes/map.js`, `server/controllers/complaintsController.js`, `server/services/storage.js`, `server/services/aiAnalysis.js`
@@ -475,14 +496,16 @@ test('POST /api/complaints rejects unauthenticated submission', async () => {
     issueType: 'LEAKAGE',
     description: 'Pipe leak near the market with heavy water loss.',
     latitude: 17.385,
-    longitude: 78.4867
+    longitude: 78.4867,
   });
 
   assert.equal(response.statusCode, 401);
 });
 
 test('GET /api/complaints/mine returns a citizen complaint list for an authenticated user', async () => {
-  const response = await request(createApp()).get('/api/complaints/mine').set('Authorization', 'Bearer test-token');
+  const response = await request(createApp())
+    .get('/api/complaints/mine')
+    .set('Authorization', 'Bearer test-token');
   assert.equal(response.statusCode, 200);
   assert.equal(Array.isArray(response.body.data), true);
 });
@@ -545,6 +568,7 @@ git commit -m "test: cover complaint and map route flows"
 ### Task 6: Add admin and error-handling route tests
 
 **Files:**
+
 - Create: `server/tests/admin.routes.test.js`
 - Create: `server/tests/error-handling.test.js`
 - Modify: `server/tests/app.test.js`
@@ -566,7 +590,9 @@ test('GET /api/admin/complaints rejects unauthenticated access', async () => {
 });
 
 test('GET /api/admin/analytics/summary returns analytics data for an admin token', async () => {
-  const response = await request(createApp()).get('/api/admin/analytics/summary').set('Authorization', 'Bearer admin-token');
+  const response = await request(createApp())
+    .get('/api/admin/analytics/summary')
+    .set('Authorization', 'Bearer admin-token');
   assert.equal(response.statusCode, 200);
 });
 ```
@@ -603,7 +629,7 @@ Apply only small correctness or seam fixes required by the test output.
 export function notFoundHandler(req, res) {
   res.status(404).json({
     success: false,
-    error: `Route ${req.originalUrl} not found`
+    error: `Route ${req.originalUrl} not found`,
   });
 }
 ```
@@ -624,6 +650,7 @@ git commit -m "test: cover admin and error handling routes"
 ### Task 7: Add full verification and coverage commands
 
 **Files:**
+
 - Modify: `client/package.json`
 - Modify: `server/package.json`
 - Modify: `package.json`
@@ -708,6 +735,7 @@ git commit -m "test: add workspace coverage commands"
 ### Task 8: Final verification and publish to `code.swecha.org`
 
 **Files:**
+
 - Modify only if any prior verification step still fails
 
 - [ ] **Step 1: Run the full verification suite**

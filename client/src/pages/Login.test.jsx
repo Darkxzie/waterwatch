@@ -9,8 +9,8 @@ const registerMock = vi.fn();
 vi.mock('../hooks/useAuth.js', () => ({
   useAuth: () => ({
     login: loginMock,
-    register: registerMock
-  })
+    register: registerMock,
+  }),
 }));
 
 describe('Login page', () => {
@@ -32,7 +32,7 @@ describe('Login page', () => {
 
   it('surfaces authentication failures', async () => {
     loginMock.mockRejectedValue({
-      response: { data: { error: 'Invalid email or password' } }
+      response: { data: { error: 'Invalid email or password' } },
     });
 
     render(
@@ -41,8 +41,12 @@ describe('Login page', () => {
       </MemoryRouter>
     );
 
-    fireEvent.change(screen.getByPlaceholderText(/email/i), { target: { value: 'user@example.com' } });
-    fireEvent.change(screen.getByPlaceholderText(/password/i), { target: { value: 'bad-password' } });
+    fireEvent.change(screen.getByPlaceholderText(/email/i), {
+      target: { value: 'user@example.com' },
+    });
+    fireEvent.change(screen.getByPlaceholderText(/password/i), {
+      target: { value: 'bad-password' },
+    });
     fireEvent.click(screen.getAllByRole('button', { name: /^login$/i })[1]);
 
     await waitFor(() => {

@@ -12,7 +12,11 @@ export function StatusTimeline({ currentStatus }) {
           <span
             key={status}
             className={`rounded-full px-3 py-1 text-xs font-semibold ${
-              active ? 'bg-water text-white' : completed ? 'bg-sky/20 text-water' : 'bg-slate-200 text-slate-600'
+              active
+                ? 'bg-water text-white'
+                : completed
+                  ? 'bg-sky/20 text-water'
+                  : 'bg-slate-200 text-slate-600'
             }`}
           >
             {status.replaceAll('_', ' ')}

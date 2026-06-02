@@ -1,0 +1,10 @@
+title = "WaterWatch Gitleaks Config"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Example environment values"
+paths = [
+  '''\.env\.example$'''
+]

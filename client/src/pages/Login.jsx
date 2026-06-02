@@ -22,9 +22,12 @@ export default function Login() {
           setLoading(true);
           setError('');
           try {
-            const payload = mode === 'register' ? form : { email: form.email, password: form.password };
+            const payload =
+              mode === 'register' ? form : { email: form.email, password: form.password };
             const authData = mode === 'register' ? await register(payload) : await login(payload);
-            toast.success(mode === 'register' ? 'Account created successfully' : 'Logged in successfully');
+            toast.success(
+              mode === 'register' ? 'Account created successfully' : 'Logged in successfully'
+            );
             navigate(authData.user.role === 'CITIZEN' ? '/my-complaints' : '/dashboard');
           } catch (requestError) {
             setError(requestError.response?.data?.error || 'Authentication failed');
@@ -45,17 +48,24 @@ export default function Login() {
                   setError('');
                 }}
                 className={`flex-1 rounded-xl px-4 py-2 text-sm font-semibold transition ${
-                  mode === item ? 'bg-white text-slate-950 shadow-soft' : 'text-mist hover:text-white'
+                  mode === item
+                    ? 'bg-white text-slate-950 shadow-soft'
+                    : 'text-mist hover:text-white'
                 }`}
               >
                 {item === 'login' ? 'Login' : 'Register'}
               </button>
             ))}
           </div>
-          <h1 className="font-heading text-3xl font-bold text-white">{mode === 'login' ? 'Welcome back' : 'Create account'}</h1>
-          <p className="mt-2 text-sm leading-7 text-mist">Use the demo admin credentials or create a new citizen account to access the live flow.</p>
+          <h1 className="font-heading text-3xl font-bold text-white">
+            {mode === 'login' ? 'Welcome back' : 'Create account'}
+          </h1>
+          <p className="mt-2 text-sm leading-7 text-mist">
+            Use the demo admin credentials or create a new citizen account to access the live flow.
+          </p>
           <div className="mt-4 rounded-2xl border border-sky/15 bg-sky/10 px-4 py-3 text-sm text-sky">
-            Demo admin: <span className="font-semibold">admin@waterwatch.local</span> / <span className="font-semibold">Admin@123</span>
+            Demo admin: <span className="font-semibold">admin@waterwatch.local</span> /{' '}
+            <span className="font-semibold">Admin@123</span>
           </div>
           <div className="mt-6 grid gap-4">
             {mode === 'register' ? (
@@ -64,7 +74,9 @@ export default function Login() {
                 placeholder="Full name"
                 className="input-dark rounded-2xl px-4 py-3 outline-none"
                 value={form.name}
-                onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, name: event.target.value }))
+                }
               />
             ) : null}
             <input
@@ -72,17 +84,27 @@ export default function Login() {
               placeholder="Email"
               className="input-dark rounded-2xl px-4 py-3 outline-none"
               value={form.email}
-              onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
+              onChange={(event) =>
+                setForm((current) => ({ ...current, email: event.target.value }))
+              }
             />
             <input
               type="password"
               placeholder="Password"
               className="input-dark rounded-2xl px-4 py-3 outline-none"
               value={form.password}
-              onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
+              onChange={(event) =>
+                setForm((current) => ({ ...current, password: event.target.value }))
+              }
             />
-            {error ? <p className="rounded-2xl bg-critical/10 px-4 py-3 text-sm text-critical">{error}</p> : null}
-            <Button type="submit" loading={loading} loadingText={mode === 'login' ? 'Signing in...' : 'Creating account...'}>
+            {error ? (
+              <p className="rounded-2xl bg-critical/10 px-4 py-3 text-sm text-critical">{error}</p>
+            ) : null}
+            <Button
+              type="submit"
+              loading={loading}
+              loadingText={mode === 'login' ? 'Signing in...' : 'Creating account...'}
+            >
               {mode === 'login' ? 'Login' : 'Register'}
             </Button>
           </div>

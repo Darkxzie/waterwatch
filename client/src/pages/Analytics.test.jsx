@@ -16,14 +16,14 @@ vi.mock('recharts', () => {
     Tooltip: () => <div>Tooltip</div>,
     XAxis: () => <div />,
     YAxis: () => <div />,
-    Cell: () => <div />
+    Cell: () => <div />,
   };
 });
 
 vi.mock('../hooks/useComplaints.js', () => ({
   useAdminSummary: vi.fn(),
   useAdminTrends: vi.fn(),
-  useAdminResolutionTime: vi.fn()
+  useAdminResolutionTime: vi.fn(),
 }));
 
 import { useAdminResolutionTime, useAdminSummary, useAdminTrends } from '../hooks/useComplaints.js';
@@ -43,13 +43,19 @@ describe('Analytics page', () => {
     useAdminSummary.mockReturnValue({
       data: {
         byType: [{ issueType: 'LEAKAGE', _count: { _all: 2 } }],
-        bySeverity: [{ aiSeverity: 'HIGH', _count: { _all: 2 } }]
+        bySeverity: [{ aiSeverity: 'HIGH', _count: { _all: 2 } }],
       },
-      error: null
+      error: null,
     });
     useAdminTrends.mockReturnValue({ data: [{ createdAt: '2026-05-30T00:00:00.000Z' }] });
     useAdminResolutionTime.mockReturnValue({
-      data: [{ issueType: 'LEAKAGE', createdAt: '2026-05-30T00:00:00.000Z', resolvedAt: '2026-05-30T04:00:00.000Z' }]
+      data: [
+        {
+          issueType: 'LEAKAGE',
+          createdAt: '2026-05-30T00:00:00.000Z',
+          resolvedAt: '2026-05-30T04:00:00.000Z',
+        },
+      ],
     });
 
     render(<Analytics />);

@@ -20,5 +20,5 @@ export const upload = multer({
 
     file.originalname = sanitizeFilename(file.originalname);
     return cb(null, true);
-  }
+  },
 });

@@ -22,7 +22,11 @@ Severity guide:
 - LOW: Minor drip, single household complaint`;
 
 function stripJsonFences(rawText) {
-  return rawText.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```$/i, '').trim();
+  return rawText
+    .replace(/^```json\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/```$/i, '')
+    .trim();
 }
 
 function heuristicAnalysis({ issueType, description }) {
@@ -36,7 +40,7 @@ function heuristicAnalysis({ issueType, description }) {
       summary: 'Citizen reports a disruption in water supply that may affect multiple households.',
       suggestedDepartment: 'HMWSSB',
       confidence: 0.62,
-      keyFactors: ['water outage keywords', 'supply disruption description']
+      keyFactors: ['water outage keywords', 'supply disruption description'],
     };
   }
 
@@ -48,7 +52,7 @@ function heuristicAnalysis({ issueType, description }) {
       summary: 'Citizen reports visible water quality contamination requiring inspection.',
       suggestedDepartment: 'Water Board',
       confidence: 0.66,
-      keyFactors: ['water quality keywords', 'health risk indicators']
+      keyFactors: ['water quality keywords', 'health risk indicators'],
     };
   }
 
@@ -56,10 +60,11 @@ function heuristicAnalysis({ issueType, description }) {
     category: issueType,
     severity: 'MEDIUM',
     priority: 'MODERATE',
-    summary: 'Citizen submitted a water infrastructure issue that should be reviewed by the authority.',
+    summary:
+      'Citizen submitted a water infrastructure issue that should be reviewed by the authority.',
     suggestedDepartment: 'Municipal Engineering',
     confidence: 0.51,
-    keyFactors: ['reported issue type', 'citizen description']
+    keyFactors: ['reported issue type', 'citizen description'],
   };
 }
 
@@ -79,8 +84,8 @@ export async function analyzeComplaint({ issueType, description, imageBase64 }) 
       source: {
         type: 'base64',
         media_type: mediaType,
-        data
-      }
+        data,
+      },
     });
   }
 
@@ -89,7 +94,7 @@ export async function analyzeComplaint({ issueType, description, imageBase64 }) 
       model: 'claude-sonnet-4-20250514',
       max_tokens: 500,
       system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content }]
+      messages: [{ role: 'user', content }],
     });
 
     const rawText = response.content.find((item) => item.type === 'text')?.text ?? '{}';
@@ -97,7 +102,7 @@ export async function analyzeComplaint({ issueType, description, imageBase64 }) 
   } catch {
     return {
       ...heuristicAnalysis({ issueType, description }),
-      aiStatus: 'PENDING_ANALYSIS'
+      aiStatus: 'PENDING_ANALYSIS',
     };
   }
 }

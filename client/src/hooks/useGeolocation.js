@@ -16,7 +16,7 @@ export function useGeolocation() {
       (position) => {
         setCoords({
           latitude: position.coords.latitude,
-          longitude: position.coords.longitude
+          longitude: position.coords.longitude,
         });
       },
       () => setError('Location access denied. Using Hyderabad as default.')

@@ -4,16 +4,16 @@ import MapPage from './Map.jsx';
 
 vi.mock('../components/map/LeafletBaseMap.jsx', () => ({
   markerIcon: {},
-  LeafletBaseMap: ({ children }) => <div>{children}</div>
+  LeafletBaseMap: ({ children }) => <div>{children}</div>,
 }));
 
 vi.mock('react-leaflet', () => ({
   Marker: ({ children }) => <div>{children}</div>,
-  Popup: ({ children }) => <div>{children}</div>
+  Popup: ({ children }) => <div>{children}</div>,
 }));
 
 vi.mock('../hooks/useComplaints.js', () => ({
-  useMapComplaints: vi.fn()
+  useMapComplaints: vi.fn(),
 }));
 
 import { useMapComplaints } from '../hooks/useComplaints.js';
@@ -30,10 +30,26 @@ describe('Map page', () => {
   it('filters visible complaints by severity', () => {
     useMapComplaints.mockReturnValue({
       data: [
-        { id: '1', issueType: 'LEAKAGE', latitude: 17.1, longitude: 78.1, address: 'A', aiSeverity: 'HIGH', status: 'OPEN' },
-        { id: '2', issueType: 'NO_WATER', latitude: 17.2, longitude: 78.2, address: 'B', aiSeverity: 'LOW', status: 'OPEN' }
+        {
+          id: '1',
+          issueType: 'LEAKAGE',
+          latitude: 17.1,
+          longitude: 78.1,
+          address: 'A',
+          aiSeverity: 'HIGH',
+          status: 'OPEN',
+        },
+        {
+          id: '2',
+          issueType: 'NO_WATER',
+          latitude: 17.2,
+          longitude: 78.2,
+          address: 'B',
+          aiSeverity: 'LOW',
+          status: 'OPEN',
+        },
       ],
-      isLoading: false
+      isLoading: false,
     });
 
     render(<MapPage />);

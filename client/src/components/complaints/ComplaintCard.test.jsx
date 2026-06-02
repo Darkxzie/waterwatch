@@ -13,7 +13,7 @@ describe('ComplaintCard', () => {
           aiSeverity: 'HIGH',
           aiSummary: 'Pipe burst near the metro station',
           description: 'Fallback description',
-          status: 'IN_PROGRESS'
+          status: 'IN_PROGRESS',
         }}
       />
     );

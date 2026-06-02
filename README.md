@@ -24,6 +24,24 @@ Note:
 - interactive API features still require a reachable backend API unless a hosted backend is added later
 - fixing public access requires Swecha/GitLab admin-side Pages DNS or host configuration changes rather than frontend code changes in this repository
 
+## Deployment Decision
+
+The repository should keep **GitHub Pages** as the default public frontend deployment for now.
+
+Vercel is **not** the better default fit for the current architecture because:
+
+- the frontend is already a static Vite build that works cleanly on Pages with `HashRouter`
+- the backend is a stateful Express + Prisma + PostgreSQL service, not a serverless-first Vercel API layout
+- moving only the frontend to Vercel would not solve the main production need, which is reliable backend hosting
+
+Recommended production topology:
+
+- frontend demo or docs UI: GitHub Pages
+- backend API: Docker on Render, Railway, Fly.io, or a VM/container platform
+- database: managed PostgreSQL
+
+The included `Dockerfile` is intended for backend-oriented container deployment.
+
 ## Features
 
 - Citizen complaint reporting flow with issue type, description, photo, and location
@@ -281,28 +299,46 @@ At repository root:
 - `npm run dev:client`
 - `npm run dev:server`
 - `npm run build`
+- `npm run format`
+- `npm run format:check`
+- `npm run lint`
+- `npm run type-check`
 - `npm run test`
+- `npm run test:coverage`
+- `npm run audit`
+- `npm run changelog`
 - `npm run prisma:generate`
 - `npm run prisma:migrate`
 
 ## Testing And Verification
 
-Verified during scaffold setup:
+Repository quality gates:
 
-- `npm install`
-- `npm run prisma:generate --workspace server`
-- `npm run test --workspace server`
-- `npm run test --workspace client`
-- `npm run build --workspace client`
+- ESLint for client and server JavaScript
+- Prettier formatting checks
+- TypeScript-based structural checking for the JavaScript workspace
+- server coverage enforcement with `c8`
+- client coverage enforcement with Vitest coverage thresholds
+- npm audit in CI
+- gitleaks secret scanning in CI
+- Husky + lint-staged pre-commit enforcement
 
-Current test coverage is minimal and focused on bootstrap health:
+Current enforced coverage thresholds:
 
-- backend health endpoint smoke test
-- frontend app-shell render smoke test
+- server: at least 80% statements and lines
+- client: at least 80% statements and lines
 
 ## Security Notes
 
-The scaffold includes initial support for:
+The repository now includes:
+
+- `SECURITY.md` with disclosure and response expectations
+- gitleaks configuration for secret scanning
+- dependency audit workflow for npm workspaces
+- hardened CI checks that fail on audit findings
+- existing application protections such as auth, rate limiting, and upload restrictions
+
+The application scaffold also includes:
 
 - JWT auth middleware
 - role-based authorization
@@ -324,11 +360,14 @@ Before production use, you should still add:
 Implemented now:
 
 - monorepo workspace setup
+- open-source health files and governance docs
+- Docker packaging and container healthcheck
+- ESLint, Prettier, Husky, lint-staged, changelog automation, and GitLab/GitHub CI quality gates
 - React route shell and design system foundation
 - Express route/controller structure
 - Prisma schema and client generation
 - shared Zod schemas
-- baseline tests
+- expanded route, hook, utility, and page tests
 
 Partially implemented or placeholder-only:
 

@@ -14,6 +14,6 @@ export function errorHandler(error, _req, res, _next) {
   res.status(error.status || 500).json({
     success: false,
     data: null,
-    error: error.message || 'Internal server error'
+    error: error.message || 'Internal server error',
   });
 }

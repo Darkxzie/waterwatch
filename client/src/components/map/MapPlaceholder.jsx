@@ -4,7 +4,8 @@ export function MapPlaceholder({ title = 'Live Map Preview' }) {
       <div>
         <h3 className="font-heading text-xl font-semibold text-water">{title}</h3>
         <p className="mt-2 max-w-md text-sm text-slate-600">
-          Leaflet integration is scaffolded here. Connect this surface to live complaint markers, clustering, and the heatmap layer.
+          Leaflet integration is scaffolded here. Connect this surface to live complaint markers,
+          clustering, and the heatmap layer.
         </p>
       </div>
     </div>

@@ -7,7 +7,7 @@ describe('OfflineBanner', () => {
   beforeEach(() => {
     Object.defineProperty(window.navigator, 'onLine', {
       configurable: true,
-      value: true
+      value: true,
     });
   });
 
@@ -20,7 +20,7 @@ describe('OfflineBanner', () => {
   it('renders an offline warning when the ui store is offline', () => {
     Object.defineProperty(window.navigator, 'onLine', {
       configurable: true,
-      value: false
+      value: false,
     });
     useUiStore.setState({ isOffline: true });
     render(<OfflineBanner />);

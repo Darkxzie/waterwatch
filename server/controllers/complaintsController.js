@@ -21,8 +21,8 @@ export async function createComplaint(req, res, next) {
         aiConfidence: ai.confidence,
         aiSuggestedDept: ai.suggestedDepartment,
         aiKeyFactors: ai.keyFactors || [],
-        aiStatus: ai.aiStatus || 'COMPLETED'
-      }
+        aiStatus: ai.aiStatus || 'COMPLETED',
+      },
     });
 
     return created(res, complaint);
@@ -40,9 +40,9 @@ export async function getMyComplaints(req, res, next) {
         where,
         orderBy: { createdAt: 'desc' },
         skip: (query.page - 1) * query.limit,
-        take: query.limit
+        take: query.limit,
       }),
-      prisma.complaint.count({ where })
+      prisma.complaint.count({ where }),
     ]);
 
     return ok(res, items, { page: query.page, total });
@@ -54,7 +54,7 @@ export async function getMyComplaints(req, res, next) {
 export async function getComplaintById(req, res, next) {
   try {
     const complaint = await prisma.complaint.findFirst({
-      where: { id: req.params.id, userId: req.user.sub }
+      where: { id: req.params.id, userId: req.user.sub },
     });
 
     return ok(res, complaint);
@@ -67,7 +67,7 @@ export async function upvoteComplaint(req, res, next) {
   try {
     const complaint = await prisma.complaint.update({
       where: { id: req.params.id },
-      data: { upvotes: { increment: 1 } }
+      data: { upvotes: { increment: 1 } },
     });
 
     return ok(res, complaint);
@@ -89,9 +89,9 @@ export async function getPublicMapComplaints(_req, res, next) {
         aiSeverity: true,
         status: true,
         createdAt: true,
-        upvotes: true
+        upvotes: true,
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
 
     return ok(res, complaints);
@@ -105,7 +105,7 @@ export async function getHeatmap(_req, res, next) {
     const rows = await prisma.complaint.groupBy({
       by: ['address'],
       _count: { _all: true },
-      where: { status: { not: 'REJECTED' } }
+      where: { status: { not: 'REJECTED' } },
     });
 
     return ok(res, rows);

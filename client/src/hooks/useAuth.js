@@ -20,6 +20,6 @@ export function useAuth() {
     logout: async () => {
       await api.post('/auth/logout');
       logout();
-    }
+    },
   };
 }

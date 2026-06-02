@@ -7,10 +7,10 @@ export const useAuthStore = create(
       user: null,
       accessToken: null,
       setAuth: ({ user, accessToken }) => set({ user, accessToken }),
-      logout: () => set({ user: null, accessToken: null })
+      logout: () => set({ user: null, accessToken: null }),
     }),
     {
-      name: 'waterwatch-auth'
+      name: 'waterwatch-auth',
     }
   )
 );

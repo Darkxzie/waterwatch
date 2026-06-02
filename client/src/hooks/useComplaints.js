@@ -7,7 +7,7 @@ export function useMapComplaints() {
     queryFn: async () => {
       const response = await api.get('/map/complaints');
       return response.data.data;
-    }
+    },
   });
 }
 
@@ -17,7 +17,7 @@ export function useMyComplaints() {
     queryFn: async () => {
       const response = await api.get('/complaints/mine');
       return response.data.data || [];
-    }
+    },
   });
 }
 
@@ -27,7 +27,7 @@ export function useAdminComplaints() {
     queryFn: async () => {
       const response = await api.get('/admin/complaints');
       return response.data.data || [];
-    }
+    },
   });
 }
 
@@ -37,7 +37,7 @@ export function useAdminSummary() {
     queryFn: async () => {
       const response = await api.get('/admin/analytics/summary');
       return response.data.data;
-    }
+    },
   });
 }
 
@@ -47,7 +47,7 @@ export function useAdminTrends() {
     queryFn: async () => {
       const response = await api.get('/admin/analytics/trends');
       return response.data.data;
-    }
+    },
   });
 }
 
@@ -57,6 +57,6 @@ export function useAdminResolutionTime() {
     queryFn: async () => {
       const response = await api.get('/admin/analytics/resolution-time');
       return response.data.data;
-    }
+    },
   });
 }

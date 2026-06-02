@@ -5,7 +5,7 @@ import {
   getResolutionTime,
   getSummary,
   getTrends,
-  updateComplaintStatus
+  updateComplaintStatus,
 } from '../controllers/adminController.js';
 import { requireAuth, requireRole } from '../middleware/auth.js';
 

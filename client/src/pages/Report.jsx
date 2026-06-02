@@ -24,9 +24,15 @@ export default function Report() {
   const [submitted, setSubmitted] = useState(null);
   const [submitError, setSubmitError] = useState('');
 
-  const marker = useMemo(() => ({ latitude: coords.latitude, longitude: coords.longitude }), [coords.latitude, coords.longitude]);
+  const marker = useMemo(
+    () => ({ latitude: coords.latitude, longitude: coords.longitude }),
+    [coords.latitude, coords.longitude]
+  );
   const descriptionLength = description.trim().length;
-  const isValid = descriptionLength >= DESCRIPTION_MIN_LENGTH && Number.isFinite(coords.latitude) && Number.isFinite(coords.longitude);
+  const isValid =
+    descriptionLength >= DESCRIPTION_MIN_LENGTH &&
+    Number.isFinite(coords.latitude) &&
+    Number.isFinite(coords.longitude);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -39,7 +45,9 @@ export default function Report() {
     }
 
     if (!isValid) {
-      setSubmitError(`Description must be at least ${DESCRIPTION_MIN_LENGTH} characters and location must be valid.`);
+      setSubmitError(
+        `Description must be at least ${DESCRIPTION_MIN_LENGTH} characters and location must be valid.`
+      );
       return;
     }
 
@@ -71,8 +79,12 @@ export default function Report() {
     return (
       <PageWrapper className="flex justify-center">
         <section className="glass-panel w-full max-w-2xl rounded-[2rem] p-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky">Complaint submitted</p>
-          <h1 className="mt-2 font-heading text-3xl font-bold text-white">Your report is now in the queue.</h1>
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky">
+            Complaint submitted
+          </p>
+          <h1 className="mt-2 font-heading text-3xl font-bold text-white">
+            Your report is now in the queue.
+          </h1>
           <p className="mt-4 text-mist">Complaint ID: {submitted.id}</p>
           <div className="mt-6 grid gap-3 rounded-3xl border border-white/8 bg-white/5 p-5">
             <p className="text-slate-200">Severity: {submitted.aiSeverity || 'PENDING'}</p>
@@ -104,10 +116,19 @@ export default function Report() {
   return (
     <PageWrapper className="grid gap-8 lg:grid-cols-[1fr_0.95fr]">
       <form className="glass-panel rounded-[2rem] p-8" onSubmit={handleSubmit}>
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky">Citizen reporting</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky">
+          Citizen reporting
+        </p>
         <h1 className="mt-3 font-heading text-4xl font-bold text-white">Report a Water Issue</h1>
-        <p className="mt-2 text-sm leading-7 text-mist">Share what happened, attach a photo, and confirm the map pin with a calmer, cleaner dark interface.</p>
-        {!user ? <p className="mt-3 rounded-2xl border border-sky/15 bg-sky/10 px-4 py-3 text-sm text-sky">Login is required before complaint submission.</p> : null}
+        <p className="mt-2 text-sm leading-7 text-mist">
+          Share what happened, attach a photo, and confirm the map pin with a calmer, cleaner dark
+          interface.
+        </p>
+        {!user ? (
+          <p className="mt-3 rounded-2xl border border-sky/15 bg-sky/10 px-4 py-3 text-sm text-sky">
+            Login is required before complaint submission.
+          </p>
+        ) : null}
         <div className="mt-8 grid gap-6">
           <div className="grid gap-3 sm:grid-cols-2">
             {issueTypes.map((item) => (
@@ -116,7 +137,9 @@ export default function Report() {
                 type="button"
                 onClick={() => setIssueType(item.value)}
                 className={`rounded-2xl border p-4 text-left transition ${
-                  issueType === item.value ? 'border-sky/35 bg-sky/10 text-white' : 'border-white/10 bg-white/5 text-slate-200 hover:bg-white/8'
+                  issueType === item.value
+                    ? 'border-sky/35 bg-sky/10 text-white'
+                    : 'border-white/10 bg-white/5 text-slate-200 hover:bg-white/8'
                 }`}
               >
                 <div className="text-2xl">{item.icon}</div>
@@ -134,7 +157,9 @@ export default function Report() {
               className="input-dark rounded-2xl px-4 py-3 outline-none transition"
               placeholder="Describe the issue, affected area, and urgency."
             />
-            <span className={`text-xs ${descriptionLength >= DESCRIPTION_MIN_LENGTH ? 'text-low' : 'text-mist'}`}>
+            <span
+              className={`text-xs ${descriptionLength >= DESCRIPTION_MIN_LENGTH ? 'text-low' : 'text-mist'}`}
+            >
               {description.length}/1500 characters. Minimum {DESCRIPTION_MIN_LENGTH}.
             </span>
           </label>
@@ -177,7 +202,7 @@ export default function Report() {
                 onChange={(event) =>
                   setCoords((current) => ({
                     ...current,
-                    latitude: Number(event.target.value)
+                    latitude: Number(event.target.value),
                   }))
                 }
                 className="input-dark rounded-2xl px-4 py-3 outline-none"
@@ -192,15 +217,24 @@ export default function Report() {
                 onChange={(event) =>
                   setCoords((current) => ({
                     ...current,
-                    longitude: Number(event.target.value)
+                    longitude: Number(event.target.value),
                   }))
                 }
                 className="input-dark rounded-2xl px-4 py-3 outline-none"
               />
             </label>
           </div>
-          {submitError ? <p className="rounded-2xl border border-critical/30 bg-critical/10 px-4 py-3 text-sm text-critical">{submitError}</p> : null}
-          <Button type="submit" loading={loading} loadingText="Submitting complaint..." disabled={loading || !isValid}>
+          {submitError ? (
+            <p className="rounded-2xl border border-critical/30 bg-critical/10 px-4 py-3 text-sm text-critical">
+              {submitError}
+            </p>
+          ) : null}
+          <Button
+            type="submit"
+            loading={loading}
+            loadingText="Submitting complaint..."
+            disabled={loading || !isValid}
+          >
             Submit Complaint
           </Button>
         </div>
@@ -214,7 +248,7 @@ export default function Report() {
             onSelect={({ lat, lng }) =>
               setCoords({
                 latitude: lat,
-                longitude: lng
+                longitude: lng,
               })
             }
           />
@@ -224,7 +258,9 @@ export default function Report() {
           <p className="mt-2 text-sm text-mist">
             Lat: {coords.latitude.toFixed(4)} | Lng: {coords.longitude.toFixed(4)}
           </p>
-          <p className="mt-2 text-sm leading-7 text-mist">Click on the map or drag the marker to fine-tune the complaint location.</p>
+          <p className="mt-2 text-sm leading-7 text-mist">
+            Click on the map or drag the marker to fine-tune the complaint location.
+          </p>
           {error ? <p className="mt-2 text-sm text-critical">{error}</p> : null}
         </div>
       </section>

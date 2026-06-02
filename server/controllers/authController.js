@@ -7,7 +7,7 @@ import { signAccessToken, signRefreshToken, verifyRefreshToken } from '../utils/
 function authPayload(user) {
   return {
     user: { id: user.id, email: user.email, name: user.name, role: user.role },
-    accessToken: signAccessToken(user)
+    accessToken: signAccessToken(user),
   };
 }
 
@@ -16,7 +16,7 @@ function setRefreshCookie(res, token) {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 7 * 24 * 60 * 60 * 1000
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 }
 

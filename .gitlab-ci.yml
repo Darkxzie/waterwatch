@@ -1,15 +1,54 @@
 image: node:20
 
+stages:
+  - format
+  - lint
+  - type_check
+  - test
+  - coverage
+  - deploy
+
 cache:
+  key:
+    files:
+      - package-lock.json
   paths:
     - node_modules/
     - client/node_modules/
     - server/node_modules/
 
+default:
+  before_script:
+    - npm ci
+
+format:
+  stage: format
+  script:
+    - npm run format:check
+
+lint:
+  stage: lint
+  script:
+    - npm run lint
+
+type_check:
+  stage: type_check
+  script:
+    - npm run type-check
+
+test:
+  stage: test
+  script:
+    - npm test
+
+coverage:
+  stage: coverage
+  script:
+    - npm run test:coverage
+
 pages:
   stage: deploy
   script:
-    - npm ci
     - npm run build --workspace client
     - cp -r client/dist public
     - cp public/index.html public/404.html

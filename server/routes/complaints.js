@@ -5,7 +5,7 @@ import {
   getHeatmap,
   getMyComplaints,
   getPublicMapComplaints,
-  upvoteComplaint
+  upvoteComplaint,
 } from '../controllers/complaintsController.js';
 import { requireAuth } from '../middleware/auth.js';
 import { complaintRateLimit } from '../middleware/rateLimit.js';

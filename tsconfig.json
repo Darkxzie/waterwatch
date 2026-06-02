@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"],
+    "resolveJsonModule": true
+  },
+  "include": ["client/**/*.js", "client/**/*.jsx", "server/**/*.js", "shared/**/*.js", "*.js"],
+  "exclude": ["node_modules", "client/dist", "client/coverage", "coverage"]
+}

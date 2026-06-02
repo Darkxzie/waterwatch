@@ -11,12 +11,22 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
-        changeOrigin: true
-      }
-    }
+        changeOrigin: true,
+      },
+    },
   },
   test: {
     environment: 'jsdom',
-    setupFiles: './src/test/setup.js'
-  }
+    setupFiles: './src/test/setup.js',
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html'],
+      include: ['src/**/*.{js,jsx}'],
+      exclude: ['src/test/**', 'src/main.jsx', 'src/components/map/LeafletBaseMap.jsx'],
+      thresholds: {
+        lines: 80,
+        statements: 80,
+      },
+    },
+  },
 });

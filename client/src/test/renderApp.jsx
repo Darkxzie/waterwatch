@@ -7,8 +7,8 @@ export function renderApp(initialEntry = '/') {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: { retry: false },
-      mutations: { retry: false }
-    }
+      mutations: { retry: false },
+    },
   });
 
   return render(

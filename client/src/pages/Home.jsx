@@ -5,16 +5,16 @@ import { Button } from '../components/ui/Button.jsx';
 const storyCards = [
   {
     label: 'Report',
-    body: 'Capture a leak, outage, or contamination point with a location pin in seconds.'
+    body: 'Capture a leak, outage, or contamination point with a location pin in seconds.',
   },
   {
     label: 'Analyze',
-    body: 'AI triage adds severity, summary, and routing signals before the issue reaches staff.'
+    body: 'AI triage adds severity, summary, and routing signals before the issue reaches staff.',
   },
   {
     label: 'Resolve',
-    body: 'Authorities see priority, trend, and field-ready context in a single operational view.'
-  }
+    body: 'Authorities see priority, trend, and field-ready context in a single operational view.',
+  },
 ];
 
 export default function Home() {
@@ -34,7 +34,8 @@ export default function Home() {
                 See it. Report it. <span className="text-sky">Fix it faster.</span>
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-mist">
-                WaterWatch gives residents a clean, fast way to report water issues while giving municipal teams a dark, data-rich command center for response.
+                WaterWatch gives residents a clean, fast way to report water issues while giving
+                municipal teams a dark, data-rich command center for response.
               </p>
             </div>
             <div className="flex flex-wrap gap-4">
@@ -70,7 +71,9 @@ export default function Home() {
                 className="glass-panel rounded-[1.75rem] p-6 transition duration-300 hover:-translate-y-1"
                 style={{ animationDelay: `${index * 90}ms` }}
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky">{card.label}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky">
+                  {card.label}
+                </p>
                 <p className="mt-3 text-base leading-7 text-slate-200">{card.body}</p>
               </div>
             ))}
@@ -82,7 +85,10 @@ export default function Home() {
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky">How it works</p>
           <div className="mt-6 grid gap-5 md:grid-cols-3">
             {storyCards.map((card, index) => (
-              <div key={card.label} className="rounded-[1.5rem] border border-white/8 bg-white/5 p-5">
+              <div
+                key={card.label}
+                className="rounded-[1.5rem] border border-white/8 bg-white/5 p-5"
+              >
                 <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 font-heading text-lg font-bold text-white">
                   0{index + 1}
                 </div>
@@ -93,10 +99,13 @@ export default function Home() {
           </div>
         </div>
         <div className="rounded-[2rem] border border-sky/15 bg-gradient-to-br from-sky/15 to-transparent p-8 shadow-soft">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky">Public helpline</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky">
+            Public helpline
+          </p>
           <h2 className="mt-3 font-heading text-3xl font-bold text-white">HMWSSB 155313</h2>
           <p className="mt-4 text-sm leading-7 text-mist">
-            Use WaterWatch for traceable issue reporting, public map visibility, and authority follow-through. The helpline remains available for urgent escalation.
+            Use WaterWatch for traceable issue reporting, public map visibility, and authority
+            follow-through. The helpline remains available for urgent escalation.
           </p>
         </div>
       </section>

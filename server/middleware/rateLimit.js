@@ -5,5 +5,9 @@ export const complaintRateLimit = rateLimit({
   limit: 10,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { success: false, data: null, error: 'Too many complaint submissions. Try again later.' }
+  message: {
+    success: false,
+    data: null,
+    error: 'Too many complaint submissions. Try again later.',
+  },
 });

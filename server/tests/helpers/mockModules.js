@@ -3,7 +3,7 @@ import { prisma } from '../../utils/prisma.js';
 const originalPrisma = {
   user: prisma.user,
   complaint: prisma.complaint,
-  $transaction: prisma.$transaction
+  $transaction: prisma.$transaction,
 };
 
 export function resetPrismaMocks() {
@@ -16,7 +16,7 @@ export function mockPrisma({ user = {}, complaint = {}, transaction } = {}) {
   prisma.user = {
     findUnique: async () => null,
     create: async ({ data }) => ({ id: 'user-1', ...data }),
-    ...user
+    ...user,
   };
 
   prisma.complaint = {
@@ -26,7 +26,7 @@ export function mockPrisma({ user = {}, complaint = {}, transaction } = {}) {
     update: async ({ where, data }) => ({ id: where.id, ...data }),
     count: async () => 0,
     groupBy: async () => [],
-    ...complaint
+    ...complaint,
   };
 
   prisma.$transaction = transaction || (async (operations) => Promise.all(operations));

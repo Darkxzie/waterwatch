@@ -1,30 +1,38 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express from 'express';
 import helmet from 'helmet';
+import './utils/loadEnv.js';
 import authRoutes from './routes/auth.js';
 import complaintRoutes from './routes/complaints.js';
 import mapRoutes from './routes/map.js';
 import adminRoutes from './routes/admin.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
-dotenv.config();
-
 export function createApp() {
   const app = express();
-  const configuredOrigins = [process.env.CLIENT_URL, 'http://localhost:5173', 'http://localhost:4173', 'http://localhost:4174', 'http://localhost:4175'].filter(Boolean);
+  const configuredOrigins = [
+    process.env.CLIENT_URL,
+    'http://localhost:5173',
+    'http://localhost:4173',
+    'http://localhost:4174',
+    'http://localhost:4175',
+  ].filter(Boolean);
 
   app.use(
     cors({
       origin(origin, callback) {
-        if (!origin || configuredOrigins.includes(origin) || /localhost\.run|loca\.lt|pages\.swecha|code\.swecha/i.test(origin)) {
+        if (
+          !origin ||
+          configuredOrigins.includes(origin) ||
+          /localhost\.run|loca\.lt|pages\.swecha|code\.swecha/i.test(origin)
+        ) {
           return callback(null, true);
         }
 
         return callback(new Error('CORS origin not allowed'));
       },
-      credentials: true
+      credentials: true,
     })
   );
   app.use(helmet());
