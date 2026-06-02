@@ -42,6 +42,25 @@ Recommended production topology:
 
 The included `Dockerfile` is intended for backend-oriented container deployment.
 
+## Backend Deployment
+
+The repository now includes [render.yaml](/C:/Users/gask4/waterwatch/render.yaml) for a low-friction backend deployment on Render.
+
+What it provisions:
+
+- a `waterwatch-api` Docker web service
+- a managed `waterwatch-db` PostgreSQL database
+- generated JWT secrets
+- a pre-deploy Prisma schema push
+
+After creating the Render service, set the GitHub repository variable `VITE_API_BASE_URL` to your live backend URL, for example:
+
+```text
+https://waterwatch-api.onrender.com/api
+```
+
+Then rerun the GitHub Pages deployment so the static frontend points at the live API.
+
 ## Features
 
 - Citizen complaint reporting flow with issue type, description, photo, and location

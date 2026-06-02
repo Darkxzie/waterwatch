@@ -7,7 +7,7 @@ import { issueTypes } from '../constants/issueTypes.js';
 import { useGeolocation } from '../hooks/useGeolocation.js';
 import { LeafletBaseMap } from '../components/map/LeafletBaseMap.jsx';
 import { Button } from '../components/ui/Button.jsx';
-import { api } from '../lib/api.js';
+import { api, getApiErrorMessage } from '../lib/api.js';
 import { useAuthStore } from '../store/authStore.js';
 
 const DESCRIPTION_MIN_LENGTH = 20;
@@ -67,7 +67,7 @@ export default function Report() {
       setSubmitted(response.data.data);
       toast.success('Complaint submitted successfully');
     } catch (requestError) {
-      const message = requestError.response?.data?.error || 'Complaint submission failed';
+      const message = getApiErrorMessage(requestError, 'Complaint submission failed');
       setSubmitError(message);
       toast.error(message);
     } finally {

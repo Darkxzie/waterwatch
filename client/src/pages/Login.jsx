@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { PageWrapper } from '../components/layout/PageWrapper.jsx';
 import { Button } from '../components/ui/Button.jsx';
 import { useAuth } from '../hooks/useAuth.js';
+import { getApiErrorMessage } from '../lib/api.js';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export default function Login() {
             );
             navigate(authData.user.role === 'CITIZEN' ? '/my-complaints' : '/dashboard');
           } catch (requestError) {
-            setError(requestError.response?.data?.error || 'Authentication failed');
+            setError(getApiErrorMessage(requestError, 'Authentication failed'));
           } finally {
             setLoading(false);
           }

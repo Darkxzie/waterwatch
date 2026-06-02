@@ -1,0 +1,44 @@
+databases:
+  - name: waterwatch-db
+    databaseName: waterwatch
+    plan: free
+    region: singapore
+
+services:
+  - type: web
+    name: waterwatch-api
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    autoDeployTrigger: commit
+    healthCheckPath: /api/health
+    preDeployCommand: npm run prisma:push --workspace server
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: waterwatch-db
+          property: connectionString
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CLIENT_URL
+        value: https://darkxzie.github.io
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: CLOUDINARY_URL
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_REGION
+        value: ap-south-1
+      - key: AWS_S3_BUCKET
+        sync: false

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { PageWrapper } from '../components/layout/PageWrapper.jsx';
 import { StatsCard } from '../components/dashboard/StatsCard.jsx';
-import { api } from '../lib/api.js';
+import { api, getApiErrorMessage } from '../lib/api.js';
 import { useAdminComplaints, useAdminResolutionTime } from '../hooks/useComplaints.js';
 import { statusFlow } from '../constants/statusFlow.js';
 
@@ -34,7 +34,7 @@ export default function Dashboard() {
       await refetch();
       toast.success('Complaint status updated');
     } catch (requestError) {
-      toast.error(requestError.response?.data?.error || 'Status update failed');
+      toast.error(getApiErrorMessage(requestError, 'Status update failed'));
     } finally {
       setUpdatingId(null);
     }
