@@ -2,6 +2,7 @@
   "name": "waterwatch",
   "version": "0.1.0",
   "private": true,
+  "license": "AGPL-3.0-or-later",
   "type": "module",
   "engines": {
     "node": ">=20.0.0",
@@ -26,6 +27,7 @@
     "test:coverage": "npm run test:coverage --workspace server && npm run test:coverage --workspace client",
     "lint": "npm run lint --workspace server && npm run lint --workspace client",
     "type-check": "tsc --noEmit --project tsconfig.json",
+    "tsc": "tsc --noEmit --project tsconfig.json",
     "audit": "npm audit --workspaces --audit-level=high",
     "secrets:scan": "gitleaks dir . --config .gitleaks.toml",
     "changelog": "git-cliff --output CHANGELOG.md",

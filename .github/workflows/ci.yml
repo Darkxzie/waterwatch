@@ -38,7 +38,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npm run type-check
+      - run: npx tsc --noEmit --project tsconfig.json
 
   test:
     runs-on: ubuntu-latest

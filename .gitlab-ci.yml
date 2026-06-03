@@ -34,7 +34,7 @@ lint:
 type_check:
   stage: type_check
   script:
-    - npm run type-check
+    - npx tsc --noEmit --project tsconfig.json
 
 test:
   stage: test

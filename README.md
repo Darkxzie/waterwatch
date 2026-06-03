@@ -24,6 +24,10 @@ Note:
 - interactive API features still require a reachable backend API unless a hosted backend is added later
 - fixing public access requires Swecha/GitLab admin-side Pages DNS or host configuration changes rather than frontend code changes in this repository
 
+## License
+
+This project is licensed under the GNU Affero General Public License v3.0 or later. See [LICENSE](/C:/Users/gask4/waterwatch/LICENSE).
+
 ## Deployment Decision
 
 The repository should keep **GitHub Pages** as the default public frontend deployment for now.
