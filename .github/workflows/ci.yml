@@ -49,6 +49,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - run: npm run prisma:generate
       - run: npm test
 
   coverage:
@@ -60,4 +61,5 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - run: npm run prisma:generate
       - run: npm run test:coverage

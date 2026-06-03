@@ -39,11 +39,13 @@ type_check:
 test:
   stage: test
   script:
+    - npm run prisma:generate
     - npm test
 
 coverage:
   stage: coverage
   script:
+    - npm run prisma:generate
     - npm run test:coverage
 
 pages:
